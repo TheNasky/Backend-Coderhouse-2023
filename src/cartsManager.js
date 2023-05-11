@@ -89,32 +89,33 @@ export default class CartManager{
             }
         }
         
-    } 
-
-    async removeProductFromCart(cid, pid){
-        await this.loadDB()
-        const indexCart = this.cart.findIndex(cart=> cart.id == cid)
-        const indexProduct = this.cart[indexCart].findIndex(product=> product.product == pid)
-        if(indexCart){
-            if(indexProduct !== -1){
-                this.cart[indexCart].products[indexProduct].splice(indexProduct,index+1)
-                await this.updateDB()
-            }else{
-                return `Failed to Delete Product, Product ${pid} was not found`
-            }
-        }else{ 
-            return `Failed to Delete Product, cart ${cid} was not found`
-        }
     }
+} 
 
-    async deleteCart(id){
-        await this.loadDB()
-        const index = this.carts.findIndex(cart => cart.id == id)
-        if(index !== -1){
-            this.products.splice(index,index+1)
-            await this.updateDB()
-        }else{
-            return `Failed to Delete cart, cart ${id} was not found`
-        }
-    }
-}
+    // async removeProductFromCart(cid, pid){
+    //     await this.loadDB()
+    //     const indexCart = this.carts.findIndex(cart=> cart.id == cid)
+    //     const indexProduct = this.carts[indexCart].findIndex(product=> product.product == pid)
+    //     if(indexCart){
+    //         if(indexProduct !== -1){
+    //             this.carts[indexCart].products.splice(indexProduct,index+1) // this.carts[indexCart].products[indexCart].splice
+    //             await this.updateDB() 
+    //         }else{
+    //             return `Failed to Delete Product, Product ${pid} was not found`
+    //         }
+    //     }else{ 
+    //         return `Failed to Delete Product, cart ${cid} was not found`
+    //     }
+    // }
+
+    // async deleteCart(id){
+    //     await this.loadDB()
+    //     const index = this.carts.findIndex(cart => cart.id == id)
+    //     if(index !== -1){
+    //         this.products.splice(index,index+1)
+    //         await this.updateDB()
+    //     }else{
+    //         return `Failed to Delete cart, cart ${id} was not found`
+    //     }
+    // }
+

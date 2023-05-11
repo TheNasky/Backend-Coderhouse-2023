@@ -1,5 +1,5 @@
 import { Router } from "express";
-import CartManager from "../cartManager.js";
+import CartManager from "../cartsManager.js";
 export const cartsRouter = Router();
 
 const cartManager = new CartManager ("src/db/carts.json");
@@ -67,3 +67,25 @@ cartsRouter.post("/:cid/products/:pid", async (req, res) => {
         console.log("Error add product in cart", error); 
     }
  })
+
+    cartsRouter.delete("/:cid/products/:pid", async (req, res) =>{
+        try {
+            const cid = req.params.cid
+            const pid = req.params.pid
+            const removeFromCart = await cartManager.removeProductFromCart(cid, pid)
+            if(!removeFromCart){
+                res.status(200).json({
+                    status:"Success",
+                    msg:`product ${pid} removed from cart ${cid}`,
+                    data: await cartManager.getCartById(cid)
+                })
+            }else{
+                res.status(400).json({
+                    status:"Error",
+                    msg:"Error deleting product from cart",
+                })
+            }
+        } catch (error) {
+            console.log("Error add product in cart", error); 
+        }
+    })
