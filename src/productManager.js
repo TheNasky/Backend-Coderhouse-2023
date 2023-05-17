@@ -30,7 +30,7 @@ export default class ProductManager {
 
     }
     
-    async addProduct({title, description, code, price, stock, category, thumbnails=[]}){
+    async addProduct({title, description, code, price,status=true, stock, category, thumbnails=[]}){
         await this.loadDB()
         this.idAutoInc++
         const productIfRepeated = this.products.some(item => item.code === code)
@@ -93,7 +93,7 @@ export default class ProductManager {
         await this.loadDB()
         const index = this.products.findIndex(product => product.id == id)
         if(index !== -1){
-            this.products.splice(index,index+1)
+            this.products.splice(index,1)
             await this.updateDB()
             console.log(`Product ${id} Deleted succesfully`)
         }else{

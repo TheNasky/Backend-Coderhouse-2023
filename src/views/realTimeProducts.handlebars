@@ -1,21 +1,76 @@
+<div class="container">
+<div class="foorm">
+    <h2>Add New Product:</h2>
+    <form id="addProductForm">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+        <label for="title">Description:</label>
+        <input type="text" id="description" name="description" required>
+        <label for="title">Code:</label>
+        <input type="text" id="code" name="code" required>
+        <label for="title">Price:</label>
+        <input type="text" id="price" name="price" required>
+        <label for="title">Stock:</label>
+        <input type="text" id="stock" name="stock" required>
+        <label for="title">Category:</label>
+        <input type="text" id="category" name="category" required>
+        <label for="title">Thumbnails</label>
+        <input type="file" id="thumbnails" name="thumbnails" required>
+      
+
+        <button type="submit">Add Product</button>
+    </form>
+</div>
+
+<div class="foorm">
+    <h2>Update Product:</h2>
+    <form id="addProductForm">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+        <label for="title">Description:</label>
+        <input type="text" id="description" name="description" required>
+        <label for="title">Code:</label>
+        <input type="text" id="code" name="code" required>
+        <label for="title">Price:</label>
+        <input type="text" id="price" name="price" required>
+        <label for="title">Stock:</label>
+        <input type="text" id="stock" name="stock" required>
+        <label for="title">Category:</label>
+        <input type="text" id="category" name="category" required>
+        <label for="title">Thumbnails</label>
+        <input type="file" id="thumbnails" name="thumbnails" required>
+
+        <button type="submit">Update Product</button>
+    </form>
+</div>
+</div>
 <div>
     <h1>Product List:</h1>
-    {{#each products}}
-        <div>
-        <ul>
-            <li>ID: {{id}}</li>  
-            <li>Nombre: {{title}}</li>
-            <li>Description: {{description}}</li>
-            <li>Product Code: {{code}}</li>
-            <li>Price: {{price}}</li>
-            <li>Stock: {{stock}}</li>
-            <li>Category: {{category}}</li>
-            <li>Img: {{thumbnails}}</li>
-        </ul>
-        </div>
-    {{/each}}
+    <div class="container2">
+      {{#each products}}
+          <div class="ulc">
+            <div>
+              <ul id="productList">
+                  <li class="prodli">ID: {{id}}</li>  
+                  <li class="prodli">Title: {{title}}</li>
+                  <li class="prodli">Description: {{description}}</li>
+                  <li class="prodli">Product Code: {{code}}</li>
+                  <li class="prodli">Price: {{price}}</li>
+                  <li class="prodli">Status: {{status}}</li>
+                  <li class="prodli">Stock: {{stock}}</li>
+                  <li class="prodli">Category: {{category}}</li>
+                  <li class="prodli">Img: {{thumbnails}}</li>
+              </ul>
+            </div>
+            <div class="botoon">
+              <button onclick="deleteProduct('{{id}}')">Delete</button>
+            </div>
+          </div>
+      {{/each}}
+    </div> 
 </div>
+
+
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/realTimeProducts.js"></script>
- 

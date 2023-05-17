@@ -105,7 +105,6 @@ export default class CartManager{
         await this.loadDB()
         const index = this.carts.findIndex(cart => cart.id == id)
         if(index !== -1){
-            //al splice lo tenes que hacer al array de carritos => this.carts vos habias puesto this.products
             this.carts.splice(index,index+1)
             await this.updateDB()
         }else{

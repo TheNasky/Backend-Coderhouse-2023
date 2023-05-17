@@ -22,13 +22,13 @@ productsRouter.get('/', async (req, res) => {
                 data: result.slice(0,limit)})
         }
         else {
+            const socketServer = req.socketServer;
+            socketServer.sockets.emit('refresh', 'refresh');
             res.status(200).json({
                 status:"Success",
                 msg:`Displaying all products`,
                 data: products
-            })
-            req.socketServer.emit('refresh', "refresh");
-                
+            })  
         }   
     } catch (error) {
         console.log("Unknown error ", error)
@@ -46,37 +46,42 @@ productsRouter.get("/:pid", async (req, res) => {
                 data:product
             });
         }else{
+            const socketServer = req.socketServer;    
+            socketServer.sockets.emit('refresh', 'refresh');  
             return res.status(400).json({
                 status:"Error",
                 msg:`Product ${id} does not exist`
             });
 
         };
+        
     } catch (error) {
        console.log("Unknown error ", error)
     }
 });
 
-productsRouter.post("/", async (req, res) =>{
+productsRouter.post('/', async (req, res) => {
     try {
         const newProduct = req.body;
         const add = await manager.addProduct(newProduct);
         if (!add) {
-            return res.status(200).json({
-                status:"Success",
-                msg:"Product added succesfully",
-                data:newProduct
+            res.status(200).json({
+                status: 'Success',
+                msg: 'Product added successfully',
+                data: newProduct,
             });
-        }else{
-            return res.status(400).json({
-                status:"Error",
-                msg:add,
+        } else {
+            res.status(400).json({
+                status: 'Error',
+                msg: add,
             });
         }
+        const socketServer = req.socketServer;
+        socketServer.sockets.emit('refresh', 'refresh');
     } catch (error) {
-        console.log("Unknown error ", error)
+      console.log('Unknown error ', error);
     }
-})
+  });
 
 productsRouter.put("/:pid", async (req, res) => {
     try {
@@ -84,6 +89,8 @@ productsRouter.put("/:pid", async (req, res) => {
             const product= req.body;
             const updateProduct = await manager.updateProduct(id,product);
             if (!updateProduct) {
+                const socketServer = req.socketServer;    
+                socketServer.sockets.emit('refresh', 'refresh');  
                 return res.status(200).json({
                     status:"Success",
                     msg:"Product Updated",
@@ -111,10 +118,12 @@ productsRouter.delete("/:pid", async (req, res) => {
                 msg:`Product ${id} does not exist`
             });
         } else {
+            const socketServer = req.socketServer;    
+            socketServer.sockets.emit('refresh', 'refresh');  
             await manager.deleteProduct(id)
             return res.status(200).json({
                 status:"Success",
-                msg:`Product ${id} deleted successfully`,
+                msg:`Product ${id} deleted successfully`
             });
         }
     } catch (error) {

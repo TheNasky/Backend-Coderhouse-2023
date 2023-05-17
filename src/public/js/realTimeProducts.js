@@ -1,7 +1,65 @@
-const socket = io()
-socket.emit ('message','¡Hola, me estoy comunicando desde un websocket!')
+const socket = io();
 
+// Listen for the 'refresh' event
+socket.on('refresh', () => {
+  // Refresh the page when the event is received
+  location.reload();
+});
 
-socket.on("refresh",socket=>{
-    console.log("refreshing")
-})
+document.getElementById('addProductForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  const newProduct = Object.fromEntries(formData.entries());
+
+  fetch('/api/products', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newProduct),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+});
+
+function deleteProduct(productId) {
+  fetch(`/api/products/${productId}`, {
+    method: 'DELETE',
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+document.getElementById('updateProductForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  const productId = formData.get('productId');
+  const updatedProduct = Object.fromEntries(formData.entries());
+
+  fetch(`/api/products/${productId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedProduct),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+});
