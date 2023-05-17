@@ -77,7 +77,10 @@ export default class ProductManager {
         const index = this.products.findIndex(product => product.id == id)
         if(index !== -1){
             for (const property in this.products[index]) {
-                this.products[index][property]=parameters[property] ?? this.products[index][property]
+                if(property !== "id"){
+                    this.products[index][property]=parameters[property] ?? this.products[index][property]
+                }
+                
             }
             await this.updateDB()
             console.log(`Product ${id} Updated`) 

@@ -29,22 +29,15 @@ export default class CartManager{
         }
     }
 
-    async createCart(product){
+    async createCart(){
         await this.loadDB()
-        if(product.id){
-            this.carts.push({
-                id:Date.now(),
-                products:[{
-                    product:product.id,
-                    quantity:1
-                }],
-            })
-            await this.updateDB();
-        }else{
-            return "error, invalid product"
-        }   
-        
-       
+        const id= Date.now()
+        this.carts.push({
+            id:id,
+            products:[],
+        })
+        await this.updateDB();
+        return id
     }
 
     async getCarts(){
@@ -70,8 +63,8 @@ export default class CartManager{
         await this.loadDB()
         const indexCart = this.carts.findIndex(cart => cart.id == cid)
         const productIfExists= await productManager.getProductById(pid)
-        if(!indexCart){
-            console.log(`error, cart ${cid} doesn't exist`)
+        if(indexCart==-1){
+            return`Error, Cart ${cid} doesn't exist`
         }else{
             if(productIfExists){
                 const indexProduct= this.carts[indexCart].products.findIndex(product => product.product == pid)
@@ -85,37 +78,38 @@ export default class CartManager{
                 }
                 await this.updateDB();
             }else{
-                console.log(`Error, product ${pid}doesn't exist`)
+                return`Error, Product ${pid} doesn't exist`
             }
         }
         
     }
-} 
+ 
 
-    // async removeProductFromCart(cid, pid){
-    //     await this.loadDB()
-    //     const indexCart = this.carts.findIndex(cart=> cart.id == cid)
-    //     const indexProduct = this.carts[indexCart].findIndex(product=> product.product == pid)
-    //     if(indexCart){
-    //         if(indexProduct !== -1){
-    //             this.carts[indexCart].products.splice(indexProduct,index+1) // this.carts[indexCart].products[indexCart].splice
-    //             await this.updateDB() 
-    //         }else{
-    //             return `Failed to Delete Product, Product ${pid} was not found`
-    //         }
-    //     }else{ 
-    //         return `Failed to Delete Product, cart ${cid} was not found`
-    //     }
-    // }
+    async removeProductFromCart(cid, pid){
+        await this.loadDB()
+        const indexCart = this.carts.findIndex(cart=> cart.id == cid)
+        if(indexCart !== -1){
+            const indexProduct = this.carts[indexCart].products.findIndex(product=> product.product == pid)
+            if(indexProduct !== -1){
+            this.carts[indexCart].products.splice(indexProduct,indexProduct+1)
+            await this.updateDB()
+            }else{
+                return `Failed to Delete Product, Product ${pid} was not found`
+            }
+        }else{ 
+            return `Failed to Delete Product, cart ${cid} was not found`
+        }
+    }
 
-    // async deleteCart(id){
-    //     await this.loadDB()
-    //     const index = this.carts.findIndex(cart => cart.id == id)
-    //     if(index !== -1){
-    //         this.products.splice(index,index+1)
-    //         await this.updateDB()
-    //     }else{
-    //         return `Failed to Delete cart, cart ${id} was not found`
-    //     }
-    // }
-
+    async deleteCart(id){
+        await this.loadDB()
+        const index = this.carts.findIndex(cart => cart.id == id)
+        if(index !== -1){
+            //al splice lo tenes que hacer al array de carritos => this.carts vos habias puesto this.products
+            this.carts.splice(index,index+1)
+            await this.updateDB()
+        }else{
+            return `Failed to Delete cart, cart ${id} was not found`
+        }
+    }
+}

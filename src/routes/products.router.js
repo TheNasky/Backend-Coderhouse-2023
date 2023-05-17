@@ -2,6 +2,7 @@ import { Router } from "express";
 import ProductManager from "../productManager.js";
 export const productsRouter = Router();
 
+
 const manager = new ProductManager("src/db/products.json");
 
 productsRouter.get('/', async (req, res) => {
@@ -9,8 +10,8 @@ productsRouter.get('/', async (req, res) => {
         const products = await manager.getProducts()
         const limit = req.query.limit;
         if(products.length===0){
-            return res.status(418).json({
-                status:"Error 418", 
+            return res.status(400).json({
+                status:"Error 400", 
                 msg:"Product list is empty",
             })
         }else if(limit){
@@ -24,8 +25,11 @@ productsRouter.get('/', async (req, res) => {
             res.status(200).json({
                 status:"Success",
                 msg:`Displaying all products`,
-                data: products})
-        }
+                data: products
+            })
+            req.socketServer.emit('refresh', "refresh");
+                
+        }   
     } catch (error) {
         console.log("Unknown error ", error)
     }});
@@ -83,12 +87,12 @@ productsRouter.put("/:pid", async (req, res) => {
                 return res.status(200).json({
                     status:"Success",
                     msg:"Product Updated",
-                    data:manager.products[id]
+                    data: await manager.getProductById(id)
                 });
             }else{
                 return res.status(400).json({
                     status:"Error",
-                    msg:"Error updating Product",
+                    msg:updateProduct,
                 });
             }
         } catch (error) {
@@ -104,14 +108,13 @@ productsRouter.delete("/:pid", async (req, res) => {
         if (!product) {
             return res.status(400).json({
                 status:"Error",
-                msg:"Product does not exist"
+                msg:`Product ${id} does not exist`
             });
         } else {
             await manager.deleteProduct(id)
             return res.status(200).json({
                 status:"Success",
                 msg:`Product ${id} deleted successfully`,
-                data: product
             });
         }
     } catch (error) {

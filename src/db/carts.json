@@ -3,37 +3,8 @@
     "id": 1683749138357,
     "products": [
       {
+        "product": 2,
         "quantity": 1
-      }
-    ]
-  },
-  {
-    "id": 1683749194219,
-    "products": [
-      {
-        "quantity": 1
-      }
-    ]
-  },
-  {
-    "id": 1683749396720,
-    "products": [
-      {
-        "product": "32",
-        "quantity": 1
-      }
-    ]
-  },
-  {
-    "id": 1683749405509,
-    "products": [
-      {
-        "product": "Error, product given was missing id",
-        "quantity": 1
-      },
-      {
-        "product": "3",
-        "quantity": 2
       }
     ]
   }

@@ -10,7 +10,7 @@
   },
   {
     "id": 1,
-    "title": "empanada2",
+    "title": "empanada",
     "description": "una rica empanada",
     "price": 330,
     "thumbnail": "empanada.jpg",
@@ -19,7 +19,7 @@
   },
   {
     "id": 2,
-    "title": "empanada3",
+    "title": "empanada2",
     "description": "una rica empanada",
     "price": 330,
     "thumbnail": "empanada.jpg",
@@ -28,11 +28,20 @@
   },
   {
     "id": 3,
-    "title": "empanada4",
+    "title": "empanada3",
     "description": "una rica empanada",
     "price": "330",
     "thumbnail": "empanada.jpg",
     "code": "328d",
+    "stock": 33
+  },
+  {
+    "id": 4,
+    "title": "empanada4",
+    "description": "una rica empanada",
+    "price": "330",
+    "thumbnail": "empanada.jpg",
+    "code": "328s",
     "stock": 33
   }
 ]
