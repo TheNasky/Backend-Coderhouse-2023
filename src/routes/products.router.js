@@ -1,132 +1,133 @@
 import { Router } from "express";
-import ProductManager from "../productManager.js";
 export const productsRouter = Router();
+import { ProductsModel } from "../models/products.model.js";
 
 
-const manager = new ProductManager("src/db/products.json");
-
-productsRouter.get('/', async (req, res) => {
+productsRouter.get("/", async (req, res) => {
     try {
-        const products = await manager.getProducts()
-        const limit = req.query.limit;
-        if(products.length===0){
-            return res.status(400).json({
-                status:"Error 400", 
-                msg:"Product list is empty",
-            })
-        }else if(limit){
-            const result = products.slice(0, limit);
-            return res.status(200).json({
-                status:"Success",
-                msg:`Displaying first ${limit} Products`,
-                data: result.slice(0,limit)})
-        }
-        else {
-            const socketServer = req.socketServer;
-            socketServer.sockets.emit('refresh', 'refresh');
-            res.status(200).json({
-                status:"Success",
-                msg:`Displaying all products`,
-                data: products
-            })  
-        }   
-    } catch (error) {
-        console.log("Unknown error ", error)
-    }});
+        const products = await ProductsModel.find({});
+        return res.status(200).json({
+            status: "Success",
+            msg: "Product List",
+            data: products,
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            status: "error",
+            msg: "Something went wrong :(",
+            data: {},
+        });
+    }
+});
 
 
 productsRouter.get("/:pid", async (req, res) => {
     try {
         const id = req.params.pid;
-        const product = await manager.getProductById(id)
-        if(product){
-            return res.status(200).json({
-                status:"Success",
-                msg:`Displaying product ${id}`,
-                data:product
-            });
-        }else{
-            const socketServer = req.socketServer;    
-            socketServer.sockets.emit('refresh', 'refresh');  
-            return res.status(400).json({
-                status:"Error",
-                msg:`Product ${id} does not exist`
-            });
-
-        };
-        
-    } catch (error) {
-       console.log("Unknown error ", error)
-    }
+        const products = await ProductsModel.find({});
+        return res.status(200).json({
+            status: "Success",
+            msg: "Product List",
+            data: products,
+        });
+        } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            status: "error",
+            msg: "Something went wrong :(",
+            data: {},
+        });
+        }
 });
 
-productsRouter.post('/', async (req, res) => {
+productsRouter.post("/", async (req, res) => {
+    const { title, description, code, price, status, stock, category } = req.body;
     try {
-        const newProduct = req.body;
-        const add = await manager.addProduct(newProduct);
-        if (!add) {
-            res.status(200).json({
-                status: 'Success',
-                msg: 'Product added successfully',
-                data: newProduct,
-            });
-        } else {
-            res.status(400).json({
-                status: 'Error',
-                msg: add,
-            });
-        }
-        const socketServer = req.socketServer;
-        socketServer.sockets.emit('refresh', 'refresh');
-    } catch (error) {
-      console.log('Unknown error ', error);
-    }
-  });
-
-productsRouter.put("/:pid", async (req, res) => {
-    try {
-            const id = req.params.pid;
-            const product= req.body;
-            const updateProduct = await manager.updateProduct(id,product);
-            if (!updateProduct) {
-                const socketServer = req.socketServer;    
-                socketServer.sockets.emit('refresh', 'refresh');  
-                return res.status(200).json({
-                    status:"Success",
-                    msg:"Product Updated",
-                    data: await manager.getProductById(id)
-                });
-            }else{
-                return res.status(400).json({
-                    status:"Error",
-                    msg:updateProduct,
-                });
-            }
-        } catch (error) {
-            console.log("Unknown error ", error)
-        }
-        
-});
-
-productsRouter.delete("/:pid", async (req, res) => {
-    try {
-        const id = req.params.pid;
-        const product = await manager.getProductById(id)
-        if (!product) {
+        if (!title || !description || !code || !price || !status || !stock || !category) {
+            console.log("Validation error: please complete all fields.");
             return res.status(400).json({
-                status:"Error",
-                msg:`Product ${id} does not exist`
-            });
-        } else {
-            const socketServer = req.socketServer;    
-            socketServer.sockets.emit('refresh', 'refresh');  
-            await manager.deleteProduct(id)
-            return res.status(200).json({
-                status:"Success",
-                msg:`Product ${id} deleted successfully`
+            status: "error",
+            msg: "Please complete all fields.",
+            data: {},
             });
         }
-    } catch (error) {
-        console.log("Unknown error ", error)
+  
+        const product = await ProductsModel.create({
+            title,
+            description,
+            code,
+            price,
+            status,
+            stock,
+            category,
+        });
+  
+        return res.status(201).json({
+            status: "success",
+            msg: "Product created",
+            data: product,
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            status: "error",
+            msg: "Something went wrong :(",
+            data: {},
+        });
     }
-})
+});
+  
+
+productsRouter.put("/:id", async (req, res) => {
+    const { id } = req.params;
+    const { title, description, code, price, status, stock, category } = req.body;
+    try {
+        if (!title || !description || !code || !price || !status || !stock || !category) {
+            console.log("Validation error: please complete all fields.");
+            return res.status(400).json({
+            status: "error",
+            msg: "Please complete all fields.",
+            data: {},
+            });
+        }
+        const productUpdated = await ProductsModel.findByIdAndUpdate(
+            id,
+            {title,description,code,price,status,stock,category,},
+            { new: true }
+        );
+  
+        return res.status(200).json({
+            status: "success",
+            msg: "Product updated",
+            data: productUpdated,
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            status: "error",
+            msg: "Something went wrong :(",
+            data: {},
+        });
+    }
+});
+  
+productsRouter.delete("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleted = await UserModel.deleteOne({ _id: id });
+        return res.status(200).json({
+            status: "success",
+            msg: "product deleted",
+            data: {},
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            status: "error",
+            msg: "something went wrong :(",
+            data: {},
+        });
+    }
+});
+  
