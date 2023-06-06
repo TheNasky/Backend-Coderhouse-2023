@@ -11,7 +11,10 @@ import { connect } from "mongoose";
 export async function connectMongo() {
   try {
     await connect(
-      "mongodb+srv://TheNasky:9dEhBNvXTBEZuDTz@e-commerce.6tprp5i.mongodb.net/?retryWrites=true&w=majority"
+      "mongodb+srv://TheNasky:9dEhBNvXTBEZuDTz@e-commerce.6tprp5i.mongodb.net/?retryWrites=true&w=majority",
+      {
+        dbName: "E-Commerce"
+      }
     );
     console.log("plug to mongo!");
   } catch (e) {

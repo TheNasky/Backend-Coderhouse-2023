@@ -1,0 +1,21 @@
+<div class="chat-container">
+  <p id="welcome-message" class="welcome-message">
+    Welcome to the chat!
+  </p>
+  <div class="messages-container">
+    {{#each messages}}
+    <div class="ulc message-container">
+      <div class="prodli message-user">{{user}}:<span class="message-text">{{message}}</span>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  <input id="chat-box" maxlength="150" class="chat-input" name="chatbox" type="text" value="" />
+  <button id="send-button" class="send-button">Send</button>
+  <button id="change-email" class="change-email-button">Change Email</button>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/chat.js"></script>
+

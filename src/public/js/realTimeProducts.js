@@ -1,8 +1,6 @@
 const socket = io();
 
-// Listen for the 'refresh' event
 socket.on('refresh', () => {
-  // Refresh the page when the event is received
   location.reload();
 });
 

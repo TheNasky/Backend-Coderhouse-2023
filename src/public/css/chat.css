@@ -1,0 +1,79 @@
+.chat-container {
+    width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: calc(85vh);
+  }
+
+  .welcome-message {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .chat-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+
+  .send-button,
+  .change-email-button {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  .send-button {
+    background-color: #4caf50;
+    color: #fff;
+  }
+
+  .change-email-button {
+    background-color: #2196f3;
+    color: #fff;
+  }
+
+  .message-container {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .message-user {
+    font-weight: bold;
+    color: #2196f3;
+    margin-bottom: 5px;
+  }
+
+  .message-text {
+    color: #555;
+    line-height: 1.4;
+    font-weight: normal;
+    word-wrap: break-word;
+  }
+
+  .messages-container {
+    height: 60vh;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-bottom: 10px;
+    flex-grow: 1;
+  }

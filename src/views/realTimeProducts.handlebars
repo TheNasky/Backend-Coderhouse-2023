@@ -29,7 +29,7 @@
     <h2>Update Product:</h2>
     <form id="addProductForm">
         <label for="id">ID:</label>
-        <input type="text" id="id" name="id" required>
+        <input type="text" id="id" name="_id" required>
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" required>
         <label for="title">Description:</label>
@@ -56,7 +56,7 @@
           <div class="ulc">
             <div>
               <ul id="productList">
-                  <li class="prodli">ID: {{id}}</li>  
+                  <li class="prodli">ID: {{_id}}</li>  
                   <li class="prodli">Title: {{title}}</li>
                   <li class="prodli">Description: {{description}}</li>
                   <li class="prodli">Product Code: {{code}}</li>
@@ -68,7 +68,7 @@
               </ul>
             </div>
             <div class="botoon">
-              <button onclick="deleteProduct('{{id}}')">Delete</button>
+              <button onclick="deleteProduct('{{_id}}')">Delete</button>
             </div>
           </div>
       {{/each}}
