@@ -1,7 +1,7 @@
 import express from "express";
 import { messagesRouter } from "./routes/messages.router.js";
 import { productsRouter } from "./routes/products.router.js";
-import { cartsRouter } from "./routes/carts.router.js";
+// import { cartsRouter } from "./routes/carts.router.js";
 import { viewsRouter } from "./routes/views.router.js";
 import handlebars from "express-handlebars"
 import __dirname from "./utils.js"
@@ -37,5 +37,5 @@ app.use((req, res, next) => {
 app.use("/", viewsRouter);
 app.use("/api/messages", messagesRouter);
 app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
+// app.use("/api/carts", cartsRouter);
 

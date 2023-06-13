@@ -1,7 +1,7 @@
 import fs from "fs";
 
-if (!fs.existsSync("src/db/products.json")) {
-    fs.writeFileSync("src/db/products.json", "[]");
+if (!fs.existsSync("src/DAO/db/products.json")) {
+    fs.writeFileSync("src/DAO/db/products.json", "[]");
 }
 
 export default class ProductManager {

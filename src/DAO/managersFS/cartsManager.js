@@ -1,10 +1,10 @@
 import fs from "fs";
 import ProductManager from "./productManager.js";
 
-const productManager = new ProductManager("src/db/products.json")
+const productManager = new ProductManager("src/DAO/db/products.json")
 
-if (!fs.existsSync ("src/db/carts.json")){
-    fs.writeFileSync("src/db/carts.json", "[]")
+if (!fs.existsSync ("src/DAO/db/carts.json")){
+    fs.writeFileSync("src/DAO/db/carts.json", "[]")
 };
 
 export default class CartManager{

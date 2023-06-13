@@ -1,8 +1,8 @@
 import { Router } from "express";
-import CartManager from "../DAO/cartsManager.js";
+import CartManager from "../DAO/managerFS/cartsManager.js";
 export const cartsRouter = Router();
 
-const cartManager = new CartManager ("src/db/carts.json");
+const cartManager = new CartManager ("src/DAO/db/carts.json");
 
 cartsRouter.get("/:cid", async (req, res) => {
     try {

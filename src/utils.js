@@ -1,3 +1,4 @@
+
 import {fileURLToPath} from "url"
 import {dirname} from "path"
 
@@ -8,12 +9,14 @@ export default __dirname
 
 
 import { connect } from "mongoose";
+import { ProductsModel } from "./DAO/models/products.model.js"
 export async function connectMongo() {
   try {
     await connect(
       "mongodb+srv://TheNasky:9dEhBNvXTBEZuDTz@e-commerce.6tprp5i.mongodb.net/?retryWrites=true&w=majority",
       {
-        dbName: "E-Commerce"
+        dbName: "E-Commerce",
+        
       }
     );
     console.log("plug to mongo!");
@@ -25,3 +28,21 @@ export async function connectMongo() {
 
 
 //-----------------Socket-----------------------
+
+
+
+//
+
+// const queryResult = await ProductsModel.paginate({},{})  
+
+// const res = await ProductsModel.aggregate([
+//   {
+//     $project:{
+//       else:"$$ROOT"
+//     }
+//   },
+//   {
+//     $out: "products"
+//   },
+// ])
+
