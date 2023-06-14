@@ -1,22 +1,50 @@
 import { Router } from "express";
 export const productsRouter = Router();
-import { ProductsModel } from "../DAO/models/products.model.js";
+import ProductsModel from "../DAO/models/products.model.js";
 
 
 productsRouter.get("/", async (req, res) => {
     try {
-        const products = await ProductsModel.find({});
+        const limit =req.query.limit;
+        const page =req.query.page;
+        const sort =req.query.sort;
+        const category = req.query.category;
+        const inStock= req.query.inStock;
+        let products
+        let query = {};
+
+        if (category) {
+            query = { ...query, category: category };
+        }
+        if (inStock==="true") {
+            query = { ...query, stock: {$gt: 0}};
+        }
+        if (inStock==="false") {
+            query = { ...query, stock: 0};
+        }
+
+        if(sort){
+            products= await ProductsModel.paginate(query,{limit:limit??10,page:page??1,sort:{price:sort??1}});
+        }else{
+            products= await ProductsModel.paginate(query,{limit:limit??10,page:page??1});
+        }
         return res.status(200).json({
             status: "Success",
-            msg: "Product List",
-            data: products,
+            payload:products.docs,
+            totalPages:products.totalPages,
+            prevPage:products.prevPage,
+            nextPage:products.nextPage,
+            page:products.page,
+            hasPrevPage:products.hasPrevPage,
+            hasNextPage:products.hasNextPage,
+            prevLink:products.hasPrevPage==true ? "link" : null,  // no se como crear el link
+            nextLink:products.hasNextPage==true ? "link" : null   // no se como crear el link
         });
     } catch (e) {
         console.log(e);
         return res.status(500).json({
             status: "error",
             msg: "Something went wrong :(",
-            data: {},
         });
     }
 });

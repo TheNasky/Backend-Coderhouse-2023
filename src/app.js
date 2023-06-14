@@ -7,9 +7,10 @@ import handlebars from "express-handlebars"
 import __dirname from "./utils.js"
 import { connectMongo } from "./utils.js";
 import {Server} from "socket.io"
+import ProductsModel from "./DAO/models/products.model.js";
 const app = express();
 const PORT = 8080;
-connectMongo()
+await connectMongo()
 const httpServer=app.listen(PORT, () => {console.log(`App listening on http://localhost:${PORT}`)})
 const socketServer=new Server(httpServer)
 
@@ -39,3 +40,5 @@ app.use("/api/messages", messagesRouter);
 app.use("/api/products", productsRouter);
 // app.use("/api/carts", cartsRouter);
 
+    // const queryResult = await ProductsModel.paginate({},{});  
+    // console.log(queryResult);

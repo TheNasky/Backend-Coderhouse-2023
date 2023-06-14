@@ -1,6 +1,6 @@
 import { Router } from "express";
 import __dirname from "../utils.js"
-import { ProductsModel } from "../DAO/models/products.model.js";
+import ProductsModel from "../DAO/models/products.model.js";
 import { MessagesModel } from "../DAO/models/messages.model.js";
 
 export const viewsRouter = Router();
