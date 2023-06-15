@@ -53,20 +53,20 @@ productsRouter.get("/", async (req, res) => {
 productsRouter.get("/:pid", async (req, res) => {
     try {
         const id = req.params.pid;
-        const products = await ProductsModel.find({_id : id});
+        const product = await ProductsModel.find({_id : id});
         return res.status(200).json({
             status: "Success",
-            msg: "Product List",
-            data: products,
+            msg: "Displaying Product: " + id,
+            data: product,
         });
-        } catch (e) {
+    } catch (e) {
         console.log(e);
         return res.status(500).json({
             status: "error",
             msg: "Something went wrong :(",
             data: {},
         });
-        }
+    }
 });
 
 productsRouter.post("/", async (req, res) => {
