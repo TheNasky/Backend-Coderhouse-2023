@@ -39,6 +39,35 @@ function deleteProduct(productId) {
     });
 }
 
+function createCart() {
+  fetch('/api/carts', {
+    method: 'POST',
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      // Save cart ID in local storage
+      localStorage.setItem('cartId',data.data._id);
+      console.log(data);  
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+function addProductToCart(productId) {
+  const cartId = localStorage.getItem('cartId');
+  fetch(`/api/carts/${cartId}/products/${productId}`, {
+    method: 'POST',
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
 document.getElementById('updateProductForm').addEventListener('submit', (event) => {
   event.preventDefault();
 

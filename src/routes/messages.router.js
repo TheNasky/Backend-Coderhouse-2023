@@ -1,6 +1,6 @@
 import { Router } from "express";
 export const messagesRouter = Router();
-import { MessagesModel } from "../DAO/models/messages.model.js";
+import MessagesModel from "../DAO/models/messages.model.js";
 
 
 messagesRouter.get("/", async (req, res) => {

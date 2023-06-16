@@ -8,4 +8,6 @@ const schema = new Schema({
     versionKey: false
 });
 
-export const MessagesModel = model("Messages", schema);
+const MessagesModel = model("Messages", schema);
+
+export default MessagesModel

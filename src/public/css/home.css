@@ -183,4 +183,14 @@ form {
     background-color: #e53935;
   }
   
- 
+ .createCartBtn{
+  font-size: 60px;
+  padding:30px;
+  margin-right:70px;
+  margin-bottom:40px;
+  background-color:#2e70ff;; color: white;
+ }
+
+ .createCartBtn:hover{
+  background-color: #2359cfe7;
+ }

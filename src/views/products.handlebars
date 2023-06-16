@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="css/home.css">
+<div>
+    <h1>Product List:</h1>
+    <div class="container2">
+        <button onclick="createCart()" class="createCartBtn">Create Cart</button>
+        {{#each payload}}
+            <div class="ulc">
+                <div>
+                    <ul id="productList">
+                        <li class="prodli">ID: {{_id}}</li>  
+                        <li class="prodli">Title: {{title}}</li>
+                        <li class="prodli">Description: {{description}}</li>
+                        <li class="prodli">Product Code: {{code}}</li>
+                        <li class="prodli">Price: {{price}}</li>
+                        <li class="prodli">Status: {{status}}</li>
+                        <li class="prodli">Stock: {{stock}}</li>
+                        <li class="prodli">Category: {{category}}</li>
+                        <li class="prodli">Img: {{thumbnails}}</li>
+                    </ul>
+                </div>
+                <div class="botoon">
+                    <button onclick="addProductToCart('{{_id}}')">Add to Cart</button>
+                </div>
+            </div>
+        {{/each}}
+    </div> 
+</div>
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/realTimeProducts.js"></script>
+
