@@ -41,4 +41,4 @@ viewsRouter.get("/chat",async (req,res)=>{
     res.status(200).render("chat",list)
 })
 
-viewsRouter.get("/products",getAllProductsRender)
+viewsRouter.get("/products",getAllProductsRender);
