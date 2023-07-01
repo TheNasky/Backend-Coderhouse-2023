@@ -11,6 +11,8 @@ import {Server} from "socket.io"
 import ProductsModel from "./DAO/models/products.model.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 
 
 const app = express();
@@ -31,43 +33,14 @@ app.use(
     saveUninitialized: true,
   })
 );
-app.get('/login', (req, res) => {
-  const { username, password } = req.query;
-  if (username !== 'pepe' || password !== 'pepepass') {
-    return res.send('login failed');
-  }
-  req.session.user = username;
-  req.session.admin = true;
-  res.send('login success!');
-});
 
-app.get('/session', (req, res) => {
-    if (req.session.cont) {
-      req.session.cont++;
-      res.send('nos visitaste ' + req.session.cont);
-    } else {
-      req.session.cont = 1;
-      res.send('nos visitaste ' + 1);
-    }
-  });
-app.get('/show-session', (req, res) => {
-  return res.send(JSON.stringify(req.session));
-}); 
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
-
-app.get('/logout', (req, res) => {
- req.session.destroy(err => {
-   if (err) {
-     return res.json({ status: 'Logout ERROR', body: err })
-   }
-   res.send('Logout ok!')
- })
-})
-
-    
   
 
-//pasar a utils o socket
+//pasar a socket
 socketServer.on("connection", (socket) => {
     console.log("Nuevo Cliente conectado");  
 });

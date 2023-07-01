@@ -34,9 +34,7 @@ export const getAllProductsRender=async (req, res) => {
             hasNextPage:products.hasNextPage,
             prevLink:products.hasPrevPage==true ? "link" : null,  // no se como crear el link
             nextLink:products.hasNextPage==true ? "link" : null,   // no se como crear el link
-            username: req.session.username,
-            email: req.session.email,
-            isAdmin: req.session.isAdmin
+            user: req.session.user,
         }
         return res.status(200).render("products",list)
     } catch (e) {

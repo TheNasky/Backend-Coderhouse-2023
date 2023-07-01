@@ -1,68 +1,64 @@
 import { Router } from "express";
 import UsersModel from "../DAO/models/users.model.js";
 import { isAdmin, isUser } from '../middlewares/auth.js';
+import passport from "passport";
 
 export const authRouter = Router();
 
+authRouter.get('/session', (req, res) => {
+  return res.send(JSON.stringify(req.session));
+});
+
 
 authRouter.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-      if (err) {
-        return res.status(500).render('error', { error: "Session not found" });
-      }
-      return res.redirect('/auth/login');
-    });
-  });
-  
-  authRouter.get('/profile', isUser, (req, res) => {
-    const user = { email: req.session.email, isAdmin: req.session.isAdmin };
-    return res.render('profile', { user: user });
-  });
-  
-  authRouter.get('/admin', isUser, isAdmin, (req, res) => {
-    return res.send('WIP');
-  });
-  
-  authRouter.get('/login', (req, res) => {
-    return res.render('login', {});
-  });
-  
-  authRouter.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).render('error', { error: 'Please type your E-Mail address and password' });
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).render('error', { error: 'no se pudo cerrar su session' });
     }
-    const user= await UsersModel.findOne({ email: email });
-    if (user && user.password == password) {
-      req.session.email = user.email;
-      req.session.isAdmin = user.isAdmin;
-  
-      return res.redirect('/auth/profile');
-    } else {
-      return res.status(401).render('error', { error: 'E-Mail not found or wrong password' });
-    }
+    return res.redirect('/auth/login');
   });
+});
   
-  authRouter.get('/register', (req, res) => {
-    return res.render('register', {});
-  });
+authRouter.get('/profile', isUser, (req, res) => {
+  const user = { email: req.session.user.email, isAdmin: req.session.user.isAdmin };
+  return res.render('profile', { user: user });
+});
   
-  authRouter.post('/register', async (req, res) => {
-    const { email, username, password,  } = req.body;
-    if (!email || !username || !password) {
-      return res.status(400).render('error', { error: "Please complete all fields" });
-    }
-    try {
-      await UsersModel.create({ email: email, username:username, password: password, isAdmin: false });
-      req.session.email = email;
-      req.session.isAdmin = false;
+authRouter.get('/admin', isUser, isAdmin, (req, res) => {
+  return res.send('WIP');
+});
   
-      return res.redirect('/auth/profile');
-    } catch (e) {
-        console.log(e);
-        return res.status(500).json({
-            status: "error",
-            msg: "Something went wrong :(",
-        });
-    }
-  });
+authRouter.get('/login', (req, res) => {
+  return res.render('login', {});
+});
+  
+authRouter.post('/login', passport.authenticate('login', { failureRedirect: '/auth/faillogin' }), async (req, res) => {
+  if (!req.user) {
+    return res.json({ error: 'invalid credentials' });
+  }
+  req.session.user = { _id: req.user._id, email: req.user.email, firstName: req.user.firstName, lastName: req.user.lastName, isAdmin: req.user.isAdmin };
+
+  return res.status(200).redirect("../products");
+});
+
+authRouter.get('/faillogin', async (req, res) => {
+  return res.json({ error: 'fail to login' });
+});
+
+authRouter.get('/register', (req, res) => {
+  return res.render('register', {});
+});
+  
+authRouter.post('/register', passport.authenticate("register", { failureRedirect: '/auth/failregister' }), (req, res) => {
+  if (!req.user) {
+    return res.json({ error: 'Something went wrong :(' });
+  }
+  req.session.user = { _id: req.user._id, email: req.user.email, firstName: req.user.firstName, lastName: req.user.lastName, isAdmin: req.user.isAdmin };
+  
+  return res.status(200).redirect("profile");
+});
+
+authRouter.get('/failregister', async (req, res) => {
+  return res.json({ error: 'Failed to register' });
+ });
+  
