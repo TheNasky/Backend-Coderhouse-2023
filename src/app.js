@@ -13,6 +13,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
+import { sessionsRouter } from "./routes/sessions.router.js";
 
 
 const app = express();
@@ -66,4 +67,4 @@ app.use("/api/messages", messagesRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/auth", authRouter);
-
+app.use('/api/sessions', sessionsRouter);

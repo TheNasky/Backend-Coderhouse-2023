@@ -60,5 +60,5 @@ authRouter.post('/register', passport.authenticate("register", { failureRedirect
 
 authRouter.get('/failregister', async (req, res) => {
   return res.json({ error: 'Failed to register' });
- });
-  
+});
+
