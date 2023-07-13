@@ -1,9 +1,8 @@
 <link rel="stylesheet" href="css/home.css">
-<h2>Welcome {{user.first_name}}, your email is: {{user.email}} and your admin status is: {{user.isAdmin}} </h2>
+<h2>Welcome {{user.firstName}}, your email is: {{user.email}} and your main role is: {{user.roles}} </h2> <!--no se como hacer user.roles[0]-->
 <div>   
     <h1>Product List:</h1>
     <div class="container2">
-        <button onclick="createCart()" class="createCartBtn">Create Cart</button>
         {{#each payload}}
             <div class="ulc">
                 <div>
@@ -20,7 +19,7 @@
                     </ul>
                 </div>
                 <div class="botoon">
-                    <button onclick="addProductToCart('{{_id}}')">Add to Cart</button>
+                    <button onclick="addProductToCart('{{../user.cart}}', '{{_id}}')">Add to Cart</button>
                 </div>
             </div>
         {{/each}}

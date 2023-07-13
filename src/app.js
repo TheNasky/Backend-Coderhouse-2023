@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from "express";
 import { messagesRouter } from "./routes/messages.router.js";
 import { productsRouter } from "./routes/products.router.js";
@@ -16,6 +18,8 @@ import initializePassport from "./config/passport.config.js";
 import { sessionsRouter } from "./routes/sessions.router.js";
 
 
+
+
 const app = express();
 const PORT = 8080;
 const httpServer=app.listen(PORT, () => {console.log(`App listening on http://localhost:${PORT}`)})
@@ -26,7 +30,7 @@ await connectMongo()
 app.use(
   session({
     store: MongoStore.create({
-        mongoUrl:"mongodb+srv://thenasky:mBo2I5uMDxY6jsZy@e-commerce.bvacm9g.mongodb.net/?retryWrites=true&w=majority",
+        mongoUrl:process.env.MONGO_LINK,
         ttl: 3600,
         dbName: "E-Commerce" }),
     secret: 'homeroChino',

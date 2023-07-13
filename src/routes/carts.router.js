@@ -1,13 +1,13 @@
 import express from 'express';
 import {
-	getAllCarts,
-	getCartById,
-	createCart,
-	addProductToCart,
-	deleteProdductFromCart,
-	updateCartWithProducts,
-	UpdateProductQuantityInCart,
-	emptyCart
+  getAllCarts,
+  getCartById,
+  createCart,
+  addProductToCart,
+  deleteProductFromCart,
+  updateCartWithProducts,
+  updateProductQuantityInCart,
+  emptyCart,
 } from '../controllers/cartController.js';
 
 export const cartsRouter = express.Router();
@@ -25,13 +25,15 @@ cartsRouter.post('/', createCart);
 cartsRouter.post('/:cid/products/:pid', addProductToCart);
 
 // Delete a product from a cart
-cartsRouter.delete('/:cid/products/:pid', deleteProdductFromCart);
+cartsRouter.delete('/:cid/products/:pid', deleteProductFromCart);
 
 // Update a cart with new products
 cartsRouter.put('/:cid', updateCartWithProducts);
 
 // Update the quantity of a product in a cart
-cartsRouter.put('/:cid/products/:pid', UpdateProductQuantityInCart);
+cartsRouter.put('/:cid/products/:pid', updateProductQuantityInCart);
 
 // Empty a cart
 cartsRouter.delete('/:cid', emptyCart);
+
+	

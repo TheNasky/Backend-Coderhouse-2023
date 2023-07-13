@@ -13,7 +13,7 @@ import ProductsModel from "./DAO/models/products.model.js"
 export async function connectMongo() {
   try {
     await connect(
-      "mongodb+srv://thenasky:mBo2I5uMDxY6jsZy@e-commerce.bvacm9g.mongodb.net/?retryWrites=true&w=majority",
+      process.env.MONGO_LINK,
       {
         dbName: "E-Commerce",
         

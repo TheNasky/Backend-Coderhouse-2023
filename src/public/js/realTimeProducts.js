@@ -39,23 +39,8 @@ function deleteProduct(productId) {
     });
 }
 
-function createCart() {
-  fetch('/api/carts', {
-    method: 'POST',
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // Save cart ID in local storage
-      localStorage.setItem('cartId',data.data._id);
-      console.log(data);  
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-}
 
-function addProductToCart(productId) {
-  const cartId = localStorage.getItem('cartId');
+function addProductToCart(cartId,productId) {
   fetch(`/api/carts/${cartId}/products/${productId}`, {
     method: 'POST',
   })
@@ -67,7 +52,7 @@ function addProductToCart(productId) {
       console.error('Error:', error);
     });
 }
-
+  
 document.getElementById('updateProductForm').addEventListener('submit', (event) => {
   event.preventDefault();
 
