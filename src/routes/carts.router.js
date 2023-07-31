@@ -8,7 +8,7 @@ import {
   updateCartWithProducts,
   updateProductQuantityInCart,
   emptyCart,
-} from '../controllers/cartController.js';
+} from '../controllers/carts.controller.js';
 
 export const cartsRouter = express.Router();
 
