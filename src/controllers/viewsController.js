@@ -1,4 +1,4 @@
-import ProductsModel from "../DAO/models/products.model.js";
+import ProductsModel from "../DAO/Mongo/models/products.model.js";
 
 export const getAllProductsRender=async (req, res) => {
     try {

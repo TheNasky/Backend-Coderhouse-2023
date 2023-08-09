@@ -1,7 +1,7 @@
 import { Router } from "express";
 import __dirname from "../utils.js"
-import ProductsModel from "../DAO/models/products.model.js";
-import MessagesModel from "../DAO/models/messages.model.js";
+import ProductsModel from "../DAO/Mongo/models/products.model.js";
+import MessagesModel from "../DAO/Mongo/models/messages.model.js";
 import {getAllProductsRender} from "../controllers/viewsController.js"
 
 export const viewsRouter = Router();

@@ -1,12 +1,16 @@
-import CartsModel from "../DAO/models/carts.model.js";
-import ProductsModel from "../DAO/models/products.model.js";
-import UsersModel from "../DAO/models/users.model.js";
+import CartsDao from "../DAO/Mongo/DAOS/carts.dao.js";
+import ProductsDAO from "../DAO/Mongo/DAOS/products.dao.js";
+import UsersDAO from "../DAO/Mongo/DAOS/users.dao.js";
 import mongoose from "mongoose";
+
+const cartsDao = new CartsDao();
+const productsDAO = new ProductsDAO();
+const usersDAO = new UsersDAO();
 
 class CartsServices {
    async getAllCarts() {
       try {
-         const carts = await CartsModel.find({});
+         const carts = await cartsDao.getCarts();
          return { status: 200, result: { status: "Success", payload: carts } };
       } catch (error) {
          console.log(error);
@@ -23,9 +27,7 @@ class CartsServices {
 
    async getCartById(cid) {
       try {
-         const cart = await CartsModel.findOne({ _id: cid }).populate(
-            "items.idProduct"
-         );
+         const cart = await cartsDao.getPopulatedCartById(cid);
          if (!cart) {
             return {
                status: 404,
@@ -55,7 +57,7 @@ class CartsServices {
 
    async createCart() {
       try {
-         const cart = await CartsModel.create({});
+         const cart = await cartsDao.createCart();
          return {
             status: 200,
             result: { status: "Success", msg: "Cart created", payload: cart },
@@ -75,14 +77,14 @@ class CartsServices {
 
    async addProductToCart(cid, pid) {
       try {
-         const cart = await CartsModel.findOne({ _id: cid });
+         const cart = await cartsDao.getCartById(cid);
          if (!cart) {
             return {
                status: 404,
                result: { status: "Error", msg: "Cart not found", payload: {} },
             };
          }
-         const product = await ProductsModel.findOne({ _id: pid });
+         const product = await productsDAO.getProductById(pid);
          if (!product) {
             return {
                status: 404,
@@ -93,37 +95,33 @@ class CartsServices {
                },
             };
          }
-         const productExists = await CartsModel.findOne({
-            _id: cid,
-            items: { $elemMatch: { idProduct: pid } },
-         });
-         if (productExists) {
-            const result = await CartsModel.findOneAndUpdate(
-               { _id: cid, items: { $elemMatch: { idProduct: pid } } },
+         const productIndex = cart.items.findIndex(
+            (item) => item.product.toString() === pid
+         );
+         if (productIndex !== -1) {
+            await cartsDao.updateCartWith(
+               { _id: cid, items: { $elemMatch: { product: pid } } },
                { $inc: { "items.$.quantity": 1 } }
             );
-            const updatedCart = await CartsModel.findOne({ _id: cid });
             return {
                status: 200,
                result: {
                   status: "Success",
                   msg: "Quantity increased by 1",
-                  payload: updatedCart,
+                  payload: cart,
                },
             };
          } else {
-            const cartWithNewProduct = await CartsModel.findOneAndUpdate(
+            await cartsDao.updateCartWith(
                { _id: cid },
-               { $push: { items: { idProduct: pid, quantity: 1 } } },
-               { new: true }
+               { $push: { items: { product: pid, quantity: 1 } } }
             );
-            const updatedCart = await CartsModel.findOne({ _id: cid });
             return {
                status: 200,
                result: {
                   status: "Success",
                   msg: "Product added to cart",
-                  payload: updatedCart,
+                  payload: cart,
                },
             };
          }
@@ -142,19 +140,18 @@ class CartsServices {
 
    async deleteProductFromCart(cid, pid) {
       try {
-         const cart = await CartsModel.findOne({ _id: cid });
+         const cart = await cartsDao.getCartById(cid);
          if (!cart) {
             return {
                status: 404,
                result: { status: "Error", msg: "Cart not found", payload: {} },
             };
          }
-         const result = await CartsModel.findOneAndUpdate(
+         await cartsDao.updateCartWith(
             { _id: cid },
-            { $pull: { items: { _id: pid } } },
-            { new: true }
+            { $pull: { items: { _id: pid } } }
          );
-         const updatedCart = await CartsModel.findOne({ _id: cid });
+         const updatedCart = await cartsDao.getCartById(cid);
          return {
             status: 200,
             result: {
@@ -178,7 +175,7 @@ class CartsServices {
 
    async updateCartWithProducts(cid, products) {
       try {
-         const cart = await CartsModel.findOne({ _id: cid });
+         const cart = await cartsDao.getCartById(cid);
          if (!cart) {
             return {
                status: 404,
@@ -186,13 +183,12 @@ class CartsServices {
             };
          }
          const newItems = products.map((product) => ({
-            idProduct: new mongoose.Types.ObjectId(product.idProd),
-            quantity: product.cant,
+            product: new mongoose.Types.ObjectId(product.idProd),
+            quantity: product.quantity,
          }));
-         const updatedCart = await CartsModel.findOneAndUpdate(
+         const updatedCart = await cartsDao.updateCartWith(
             { _id: cid },
-            { items: newItems },
-            { new: true }
+            { items: newItems }
          );
          return {
             status: 200,
@@ -217,7 +213,7 @@ class CartsServices {
 
    async updateProductQuantityInCart(cid, pid, quantity) {
       try {
-         const cart = await CartsModel.findOne({ _id: cid });
+         const cart = await cartsDao.getCartById(cid);
          if (!cart) {
             return {
                status: 404,
@@ -225,7 +221,7 @@ class CartsServices {
             };
          }
          const productIndex = cart.items.findIndex(
-            (item) => item.idProduct.toString() === pid
+            (item) => item.product.toString() === pid
          );
          if (productIndex === -1) {
             return {
@@ -238,7 +234,7 @@ class CartsServices {
             };
          }
          cart.items[productIndex].quantity = quantity;
-         const updatedCart = await cart.save();
+         const updatedCart = await cartsDao.updateCartWith({ _id: cid }, cart);
          return {
             status: 200,
             result: {
@@ -262,7 +258,7 @@ class CartsServices {
 
    async emptyCart(cid) {
       try {
-         const cart = await CartsModel.findOne({ _id: cid });
+         const cart = cartsDao.getCartById(cid);
          if (!cart) {
             return {
                status: 404,
@@ -270,7 +266,7 @@ class CartsServices {
             };
          }
          cart.items = [];
-         const updatedCart = await cart.save();
+         const updatedCart = await cartsDao.updateCartWith({ _id: cid }, cart);
          return {
             status: 200,
             result: {
@@ -307,7 +303,7 @@ class CartsServices {
             };
          }
 
-         const cart = await CartsModel.findById(cartId);
+         const cart = await cartsDao.getCartById(cartId);
          if (!cart) {
             return {
                status: 404,
@@ -318,7 +314,7 @@ class CartsServices {
             };
          }
 
-         const user = await UsersModel.findById(userId);
+         const user = await usersDAO.getUserById(userId)
          if (!user) {
             return {
                status: 404,

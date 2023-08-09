@@ -1,5 +1,8 @@
-import ProductsModel from "../DAO/models/products.model.js";
+import ProductsModel from "../DAO/Mongo/models/products.model.js";
+import ProductsDao from "../DAO/Mongo/DAOS/products.dao.js";
 import mongoose from "mongoose";
+
+const productsDao = new ProductsDao();
 
 class ProductsServices {
    async getAllProducts(limit, page, sort, category, inStock) {
@@ -19,7 +22,7 @@ class ProductsServices {
       if (sort) {
          options.sort = { price: sort };
       }
-      products = await ProductsModel.paginate(query, options);
+      products = await productsDao.paginateProducts(query, options);
       return {
          status: 200,
          result: {
@@ -48,7 +51,7 @@ class ProductsServices {
             },
          };
       } else {
-         const product = await ProductsModel.findOne({ _id: id });
+         const product = await productsDao.getPopulatedProductById(id);
          return {
             status: 200,
             result: {
@@ -77,7 +80,7 @@ class ProductsServices {
             },
          };
       } else {
-         const finalProduct = await ProductsModel.create({
+         const finalProduct = await productsDao.create({
             title: product.title,
             description: product.description,
             code: product.code,
@@ -132,11 +135,20 @@ class ProductsServices {
             },
          };
       }
-      const updatedProduct = await ProductsModel.findByIdAndUpdate(
-         id,
-         updatedFields,
-         { new: true }
+      const updatedProduct = await productsDao.updateProductWith(
+         { _id: id },
+         updatedFields
       );
+      if (!updatedProduct) {
+         return {
+            status: 404,
+            result: {
+               status: "error",
+               msg: "Product with ID " + id + " not found.",
+               payload: {},
+            },
+         };
+      }
       return {
          status: 200,
          result: {
@@ -148,7 +160,6 @@ class ProductsServices {
    }
 
    async deleteProduct(id) {
-
       if (!mongoose.isValidObjectId(id)) {
          return {
             status: 400,
@@ -159,7 +170,7 @@ class ProductsServices {
             },
          };
       }
-      const deletedProduct = await ProductsModel.deleteOne({ _id: id });
+      const deletedProduct = await productsDao.deleteProduct(id);
       return {
          status: 200,
          result: {

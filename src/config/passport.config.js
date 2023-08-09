@@ -1,6 +1,6 @@
 import passport from "passport";
 import local from "passport-local";
-import UsersModel from "../DAO/models/users.model.js";
+import UsersModel from "../DAO/Mongo/models/users.model.js";
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from "passport-github2";
 import fetch from "node-fetch";
@@ -72,7 +72,7 @@ const initalizePassport = () => {
       "github",
       new GitHubStrategy(
          {
-            clientID: "Iv1.0a64c870063cbc1e",
+            clientID: process.env.GITHUB_ID,
             clientSecret: process.env.GITHUB_SECRET,
             callbackURL: "http://localhost:8080/api/sessions/githubcallback",
          },
