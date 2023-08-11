@@ -1,12 +1,24 @@
-<h1>Profiile</h1>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Profile</title>
+</head>
+<body>
+  <h1>Profile</h1>
 
-E-Mail:
-{{user.email}}
-<br />
-isAdmin:
-{{user.isAdmin}}
-<br />
-<a href='/auth/admin'>Admin Page<a>
+  <p>E-Mail: {{user.email}}</p>
+  <p>isAdmin: {{user.isAdmin}}</p>
+  <p><a href='/auth/admin'>Admin Page</a></p>
+  
+  {{#if user.cart}}
+    <form method="post" action="/api/carts/purchase/{{user.cart}}">
+      <input type="hidden" name="_method" value="POST">
+      <button type="submit">Purchase Cart</button>
+    </form>
+  {{else}}
+    <p>No Cart available</p>
+  {{/if}}
 
-<br />
-<a href='/auth/logout'>Logout</a>
+  <p><a href='/auth/logout'>Logout</a></p>
+</body>
+</html>

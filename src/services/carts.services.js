@@ -1,7 +1,9 @@
 import CartsDao from "../DAO/Mongo/DAOS/carts.dao.js";
 import ProductsDAO from "../DAO/Mongo/DAOS/products.dao.js";
 import UsersDAO from "../DAO/Mongo/DAOS/users.dao.js";
+import TicketsModel from "../DAO/Mongo/models/tickets.models.js";
 import mongoose from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
 const cartsDao = new CartsDao();
 const productsDAO = new ProductsDAO();
@@ -68,7 +70,7 @@ class CartsServices {
             status: 500,
             result: {
                status: "error",
-               msg: "Something went wrong :(",
+               msg: "Internal Server Error",
                payload: {},
             },
          };
@@ -95,9 +97,7 @@ class CartsServices {
                },
             };
          }
-         const productIndex = cart.items.findIndex(
-            (item) => item.product.toString() === pid
-         );
+         const productIndex = cart.items.findIndex((item) => item.product.toString() === pid);
          if (productIndex !== -1) {
             await cartsDao.updateCartWith(
                { _id: cid, items: { $elemMatch: { product: pid } } },
@@ -131,7 +131,7 @@ class CartsServices {
             status: 500,
             result: {
                status: "error",
-               msg: "Something went wrong :(",
+               msg: "Internal Server Error",
                payload: {},
             },
          };
@@ -147,10 +147,7 @@ class CartsServices {
                result: { status: "Error", msg: "Cart not found", payload: {} },
             };
          }
-         await cartsDao.updateCartWith(
-            { _id: cid },
-            { $pull: { items: { _id: pid } } }
-         );
+         await cartsDao.updateCartWith({ _id: cid }, { $pull: { items: { _id: pid } } });
          const updatedCart = await cartsDao.getCartById(cid);
          return {
             status: 200,
@@ -166,7 +163,7 @@ class CartsServices {
             status: 500,
             result: {
                status: "error",
-               msg: "Something went wrong :(",
+               msg: "Internal Server Error",
                payload: {},
             },
          };
@@ -183,13 +180,10 @@ class CartsServices {
             };
          }
          const newItems = products.map((product) => ({
-            product: new mongoose.Types.ObjectId(product.idProd),
+            product: new mongoose.Types.ObjectId(product.product),
             quantity: product.quantity,
          }));
-         const updatedCart = await cartsDao.updateCartWith(
-            { _id: cid },
-            { items: newItems }
-         );
+         const updatedCart = await cartsDao.updateCartWith({ _id: cid }, { items: newItems });
          return {
             status: 200,
             result: {
@@ -204,7 +198,7 @@ class CartsServices {
             status: 500,
             result: {
                status: "error",
-               msg: "Something went wrong :(",
+               msg: "Internal Server Error",
                payload: {},
             },
          };
@@ -220,9 +214,7 @@ class CartsServices {
                result: { status: "Error", msg: "Cart not found", payload: {} },
             };
          }
-         const productIndex = cart.items.findIndex(
-            (item) => item.product.toString() === pid
-         );
+         const productIndex = cart.items.findIndex((item) => item.product.toString() === pid);
          if (productIndex === -1) {
             return {
                status: 404,
@@ -249,7 +241,7 @@ class CartsServices {
             status: 500,
             result: {
                status: "error",
-               msg: "Something went wrong :(",
+               msg: "Internal Server Error",
                payload: {},
             },
          };
@@ -258,7 +250,7 @@ class CartsServices {
 
    async emptyCart(cid) {
       try {
-         const cart = cartsDao.getCartById(cid);
+         const cart = await cartsDao.getCartById(cid);
          if (!cart) {
             return {
                status: 404,
@@ -281,7 +273,7 @@ class CartsServices {
             status: 500,
             result: {
                status: "error",
-               msg: "Something went wrong :(",
+               msg: "Internal Server Error",
                payload: {},
             },
          };
@@ -314,7 +306,7 @@ class CartsServices {
             };
          }
 
-         const user = await usersDAO.getUserById(userId)
+         const user = await usersDAO.getUserById(userId);
          if (!user) {
             return {
                status: 404,
@@ -346,6 +338,109 @@ class CartsServices {
             },
          };
       }
+   }
+   async purchaseCart(cid) {
+      try {
+         if (!mongoose.Types.ObjectId.isValid(cid)) {
+            return {
+               status: 400,
+               result: {
+                  status: "error",
+                  error: `Invalid cart ID`,
+               },
+            };
+         }
+         const cart = await cartsDao.getCartById(cid);
+         if (!cart) {
+            return {
+               status: 400,
+               result: {
+                  status: "error",
+                  error: `Cart not found`,
+               },
+            };
+         }
+         if (cart.items.length <= 0) {
+            return {
+               status: 400,
+               result: {
+                  status: "error",
+                  error: `Cart is empty`,
+               },
+            };
+         }
+         const productsNotPurchased = [];
+         const productsPurchased = [];
+         let totalAmount = 0;
+         const purchaseProducts = await Promise.all(
+            cart.items.map(async (item) => {
+               const currentProduct = await productsDAO.getProductById(item.product);
+               if (!currentProduct) {
+                  // Handle the case where the product is not found
+                  productsNotPurchased.push({
+                     product: item.product,
+                     quantity: item.quantity,
+                  });
+                  return;
+               }
+               if (currentProduct.stock >= item.quantity) {
+                  productsPurchased.push({
+                     product: currentProduct,
+                     quantity: item.quantity,
+                  });
+                  currentProduct.stock -= item.quantity;
+                  await currentProduct.save();
+                  totalAmount += currentProduct.price * item.quantity;
+               } else {
+                  productsNotPurchased.push({
+                     product: currentProduct,
+                     quantity: item.quantity,
+                  });
+               }
+            })
+         );
+         const newTicket = {
+            code: uuidv4(),
+            amount: totalAmount,
+            purchaser: cart.user,
+            products: productsPurchased,
+         };
+         const createdTicket = await TicketsModel.create(newTicket);
+         await this.emptyCart(cart._id)
+         await this.updateCartWithProducts(cid,productsNotPurchased)
+         return {
+            status: 200,
+            result: {
+               status: "success",
+               msg: "Products purchased successfully",
+               payload: {
+                  ticket: createdTicket,
+               },
+            },
+         };
+      } catch (err) {
+         console.log(err);
+         return {
+            status: 500,
+            result: {
+               status: "error",
+               msg: "Internal Server Error",
+               payload: {},
+            },
+         };
+      }
+   }
+   async getTickets(){
+      const tickets=await TicketsModel.find({})
+      return {
+         status: 200,
+         result: {
+            status: "success",
+            msg: "Displaying all tickets",
+            payload: tickets,
+         },
+      };
+
    }
 }
 

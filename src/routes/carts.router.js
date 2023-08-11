@@ -8,8 +8,10 @@ import {
    updateCartWithProducts,
    updateProductQuantityInCart,
    emptyCart,
+   purchaseCart,
+   getTickets
 } from "../controllers/carts.controller.js";
-import { isAdmin, isCartOwner } from "../middlewares/auth.js";
+import { isUser,isAdmin, isCartOwner } from "../middlewares/auth.js";
 
 export const cartsRouter = express.Router();
 
@@ -42,7 +44,7 @@ cartsRouter.put(
 cartsRouter.delete("/:cid", isCartOwner, emptyCart);
 
 // Purchase a cart
-cartRoutes.post('/purchase/:cid', isUser,isCartOwner, purchaseCart);
+cartsRouter.post('/purchase/:cid', isUser,isCartOwner, purchaseCart);
 
 // get all tickets
-cartRoutes.get('/tickets', isUser,isAdmin, getTickets);
+cartsRouter.get('/get/tickets', isUser,isAdmin, getTickets);  

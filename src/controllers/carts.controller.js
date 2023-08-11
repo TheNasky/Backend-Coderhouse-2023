@@ -116,3 +116,14 @@ export const emptyCart = async (req, res) => {
     });
   }
 };
+
+export const purchaseCart = async (req, res) => {
+  const cid = req.params.cid;
+  const result = await cartsServices.purchaseCart(cid)
+  return res.status(result.status).json(result.result);
+};
+
+export const getTickets = async (req, res) => {
+  const result = await cartsServices.getTickets()
+  return res.status(result.status).json(result.result);
+};

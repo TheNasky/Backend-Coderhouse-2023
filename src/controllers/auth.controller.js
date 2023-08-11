@@ -14,8 +14,7 @@ export const logout = (req, res) => {
 };
 
 export const getProfile = (req, res) => {
-   const user = { email: req.session.user.email };
-   return res.render("profile", { user: user });
+   return res.render("profile", { user: req.session.user });
 };
 
 export const getAdmin = (req, res) => {
@@ -23,7 +22,7 @@ export const getAdmin = (req, res) => {
 };
 
 export const getLogin = (req, res) => {
-   return res.render("login", {});
+   return res.render("login", {});  
 };
 
 export const postLogin = async (req, res) => {
@@ -37,6 +36,7 @@ export const postLogin = async (req, res) => {
       lastName: req.user.lastName,
       age: req.user.age,
       cart: req.user.cart,
+      roles:req.user.roles
    };
 
    return res.status(200).redirect("../products");
@@ -61,6 +61,7 @@ export const postRegister = (req, res) => {
       lastName: req.user.lastName,
       age: req.user.age,
       cart: req.user.cart,
+      roles:req.user.roles
    };
 
    return res.status(200).redirect("profile");
