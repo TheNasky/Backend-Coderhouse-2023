@@ -406,8 +406,8 @@ class CartsServices {
             products: productsPurchased,
          };
          const createdTicket = await TicketsModel.create(newTicket);
-         await this.emptyCart(cart._id)
-         await this.updateCartWithProducts(cid,productsNotPurchased)
+         await this.emptyCart(cart._id);
+         await this.updateCartWithProducts(cid, productsNotPurchased);
          return {
             status: 200,
             result: {
@@ -430,17 +430,28 @@ class CartsServices {
          };
       }
    }
-   async getTickets(){
-      const tickets=await TicketsModel.find({})
-      return {
-         status: 200,
-         result: {
-            status: "success",
-            msg: "Displaying all tickets",
-            payload: tickets,
-         },
-      };
-
+   async getTickets() {
+      try {
+         const tickets = await TicketsModel.find({});
+         return {
+            status: 200,
+            result: {
+               status: "success",
+               msg: "Displaying all tickets",
+               payload: tickets,
+            },
+         };
+      } catch (error) {
+         console.error(error);
+         return {
+            status: 500,
+            result: {
+               status: "error",
+               msg: "Internal Server Error",
+               payload: {},
+            },
+         };
+      }
    }
 }
 

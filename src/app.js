@@ -6,6 +6,8 @@ import { productsRouter } from "./routes/products.router.js";
 import { cartsRouter } from "./routes/carts.router.js";
 import { viewsRouter } from "./routes/views.router.js";
 import { authRouter } from "./routes/auth.router.js";
+import { mocksRouter } from "./routes/mocks.router.js";
+
 import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import { connectMongo } from "./utils.js";
@@ -15,9 +17,10 @@ import MongoStore from "connect-mongo";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import { sessionsRouter } from "./routes/sessions.router.js";
+import compression from "compression";
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 const httpServer = app.listen(PORT, () => {
    console.log(`App listening on http://localhost:${PORT}`);
 });
@@ -32,7 +35,7 @@ app.use(
          dbName: "E-Commerce",
       }),
       secret: process.env.SESSION_SECRET,
-      resave: true,
+      resave: true,  
       saveUninitialized: true,
    })
 );
@@ -53,7 +56,8 @@ app.set("view engine", "handlebars");
 //--------------- Middlewares ---------------
 app.use(express.static(__dirname + "/public"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(compression({}))
+app.use(express.urlencoded({ extended: true }));   
 app.use((req, res, next) => {
    req.socketServer = socketServer;
    next();
@@ -66,3 +70,4 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/auth", authRouter);
 app.use("/api/sessions", sessionsRouter);
+app.use('/api/mock', mocksRouter);
