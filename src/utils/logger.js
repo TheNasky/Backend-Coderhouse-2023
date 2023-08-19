@@ -83,5 +83,3 @@ export const addLogger = (req, res, next) => {
    req.logger.http(`${req.method} Method hit on ${req.url} from [${ipClient}]`);
    next();
 };
-
-

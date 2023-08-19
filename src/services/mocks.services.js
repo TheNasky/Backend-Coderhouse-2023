@@ -21,7 +21,7 @@ class MocksServices {
          const products = Array.from({ length: 100 }, () => this.generateProduct());
          return { status: 200, result: { status: "success", payload: products } };
       } catch (error) {
-         console.error(error);
+         logger.error(`${error.stack}`);
          return {
             status: 500,
             result: { status: "error", msg: "Internal Server Error", payload: {} },

@@ -12,7 +12,7 @@ class MessagesServices {
             payload: messages,
          });
       } catch (error) {
-         console.log(error);
+         logger.error(`${error.stack}`);
          return {
             status: 500,
             result: {
@@ -49,7 +49,7 @@ class MessagesServices {
             };
          }
       } catch (error) {
-         console.log(error);
+         logger.error(`${error.stack}`);
          return {
             status: 500,
             result: {

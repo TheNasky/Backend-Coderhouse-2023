@@ -1,4 +1,3 @@
-import { ExpressHandlebars } from "express-handlebars";
 import CartsServices from "../services/carts.services.js";
 import { logger } from "../utils/logger.js";
 
@@ -8,7 +7,6 @@ const cartsServices = new CartsServices();
 export const getAllCarts = async (req, res) => {
    try {
       const result = await cartsServices.getAllCarts();
-      Expre.logas
       res.status(result.status).json(result.result);
    } catch (error) {
       logger.error(`${error.stack}`)

@@ -15,7 +15,7 @@ class CartsServices {
          const carts = await cartsDao.getCarts();
          return { status: 200, result: { status: "Success", payload: carts } };
       } catch (error) {
-         console.log(error);
+         logger.error(`${error.stack}`);
          return {
             status: 500,
             result: {
@@ -45,7 +45,7 @@ class CartsServices {
             },
          };
       } catch (error) {
-         console.log(error);
+         logger.error(`${error.stack}`);
          return {
             status: 500,
             result: {
@@ -65,7 +65,7 @@ class CartsServices {
             result: { status: "Success", msg: "Cart created", payload: cart },
          };
       } catch (error) {
-         console.log(error);
+         logger.error(`${error.stack}`);
          return {
             status: 500,
             result: {
@@ -126,7 +126,7 @@ class CartsServices {
             };
          }
       } catch (error) {
-         console.log(error);
+         logger.error(`${error.stack}`);
          return {
             status: 500,
             result: {
@@ -158,7 +158,7 @@ class CartsServices {
             },
          };
       } catch (error) {
-         console.log(error);
+         logger.error(`${error.stack}`);
          return {
             status: 500,
             result: {
@@ -193,7 +193,7 @@ class CartsServices {
             },
          };
       } catch (error) {
-         console.log(error);
+         logger.error(`${error.stack}`);
          return {
             status: 500,
             result: {
@@ -236,7 +236,7 @@ class CartsServices {
             },
          };
       } catch (error) {
-         console.log(error);
+         logger.error(`${error.stack}`);
          return {
             status: 500,
             result: {
@@ -268,7 +268,7 @@ class CartsServices {
             },
          };
       } catch (error) {
-         console.log(error);
+         logger.error(`${error.stack}`);
          return {
             status: 500,
             result: {
