@@ -4,6 +4,6 @@ const EErrors = {
    DATABASES_ERROR: 3,
    INVALID_REQUEST: 4,
    PRODUCT_ALREADY_EXISTS: 5,
- };
- 
-export default EErrors
+};
+
+export default EErrors;

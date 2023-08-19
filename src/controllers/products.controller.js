@@ -1,4 +1,5 @@
 import ProductsServices from "../services/products.services.js";
+import { logger } from "../utils/logger.js";
 
 const productsServices = new ProductsServices();
 
@@ -18,7 +19,7 @@ export const getAllProducts = async (req, res) => {
       );
       res.status(result.status).json(result.result);
    } catch (e) {
-      console.log(e);
+      logger.error(`${error.stack}`);
       return res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -32,7 +33,7 @@ export const getProductById = async (req, res) => {
       const result = await productsServices.getProductById(id);
       res.status(result.status).json(result.result);
    } catch (e) {
-      console.log(e);
+      logger.error(`${error.stack}`);
       return res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -41,8 +42,7 @@ export const getProductById = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-   const { title, description, code, price, status, stock, category } =
-      req.body;
+   const { title, description, code, price, status, stock, category } = req.body;
    const product = { title, description, code, price, status, stock, category };
    try {
       const result = await productsServices.createProduct(product);
@@ -52,7 +52,7 @@ export const createProduct = async (req, res) => {
          socketServer.sockets.emit("refresh", "refresh");
       }
    } catch (e) {
-      console.log(e);
+      logger.error(`${error.stack}`);
       return res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -63,19 +63,18 @@ export const createProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
    const { id } = req.params;
-   const { title, description, code, price, status, stock, category } =
-      req.body;
+   const { title, description, code, price, status, stock, category } = req.body;
    const product = { title, description, code, price, status, stock, category };
 
    try {
-      const result = await productsServices.updateProduct(id,product);
+      const result = await productsServices.updateProduct(id, product);
       const socketServer = req.socketServer;
       res.status(result.status).json(result.result);
       if ((result.status = 200)) {
          socketServer.sockets.emit("refresh", "refresh");
       }
    } catch (e) {
-      console.log(e);
+      logger.error(`${error.stack}`);
       return res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -94,7 +93,7 @@ export const deleteProduct = async (req, res) => {
          socketServer.sockets.emit("refresh", "refresh");
       }
    } catch (e) {
-      console.log(e);
+      logger.error(`${error.stack}`);
       return res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",

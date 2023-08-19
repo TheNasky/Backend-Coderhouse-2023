@@ -1,5 +1,5 @@
 import ProductsModel from "../DAO/Mongo/models/products.model.js";
-
+import { logger } from "../utils/logger.js";
 export const getAllProductsRender=async (req, res) => {
     try {
         const limit =req.query.limit;
@@ -38,7 +38,7 @@ export const getAllProductsRender=async (req, res) => {
         }
         return res.status(200).render("products",list)
     } catch (e) {
-        console.log(e);
+        logger.error(`${error.stack}`)
         return res.status(500).json({
             status: "error",
             msg: "Something went wrong :(",

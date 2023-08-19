@@ -115,7 +115,6 @@ class ProductsServices {
          }
       });
       if (Object.keys(updatedFields).length === 0) {
-         console.log("Validation error: no fields to update.");
          return {
             status: 400,
             result: {

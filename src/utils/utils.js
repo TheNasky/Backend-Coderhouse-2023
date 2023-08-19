@@ -9,7 +9,7 @@ export default __dirname
 
 
 import { connect } from "mongoose";
-import ProductsModel from "./DAO/Mongo/models/products.model.js"
+import ProductsModel from "../DAO/Mongo/models/products.model.js"
 export async function connectMongo() {
   try {
     await connect(

@@ -1,5 +1,5 @@
 import MessagesServices from "../services/messages.services.js";
-
+import { logger } from "../utils/logger.js";
 const messagesServices = new MessagesServices();
 
 export const getMessages = async (req, res) => {
@@ -7,7 +7,7 @@ export const getMessages = async (req, res) => {
       const messages = await messagesServices.getMessages();
       res.status(result.status).json(result.result);
    } catch (error) {
-      console.log(error);
+      logger.error(`${error.stack}`);
       res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -18,14 +18,14 @@ export const getMessages = async (req, res) => {
 export const postMessages = async (req, res) => {
    const { user, message } = req.body;
    try {
-      const result = await messagesServices.createMessage(user,message);
+      const result = await messagesServices.createMessage(user, message);
       const socketServer = req.socketServer;
       res.status(result.status).json(result.result);
-      if(result.status=200){
+      if ((result.status = 200)) {
          socketServer.sockets.emit("refresh", "refresh");
       }
    } catch (error) {
-      console.log(error);
+      logger.error(`${error.stack}`);
       res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",

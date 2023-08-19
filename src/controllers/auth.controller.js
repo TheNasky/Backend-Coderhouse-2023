@@ -5,9 +5,7 @@ export const getSession = (req, res) => {
 export const logout = (req, res) => {
    req.session.destroy((err) => {
       if (err) {
-         return res
-            .status(500)
-            .render("error", { error: "Failed to end session" });
+         return res.status(500).render("error", { error: "Failed to end session" });
       }
       return res.redirect("/auth/login");
    });
@@ -22,7 +20,7 @@ export const getAdmin = (req, res) => {
 };
 
 export const getLogin = (req, res) => {
-   return res.render("login", {});  
+   return res.render("login", {});
 };
 
 export const postLogin = async (req, res) => {
@@ -36,7 +34,7 @@ export const postLogin = async (req, res) => {
       lastName: req.user.lastName,
       age: req.user.age,
       cart: req.user.cart,
-      roles:req.user.roles
+      roles: req.user.roles,
    };
 
    return res.status(200).redirect("../products");
@@ -61,7 +59,7 @@ export const postRegister = (req, res) => {
       lastName: req.user.lastName,
       age: req.user.age,
       cart: req.user.cart,
-      roles:req.user.roles
+      roles: req.user.roles,
    };
 
    return res.status(200).redirect("profile");

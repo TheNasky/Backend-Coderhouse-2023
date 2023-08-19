@@ -1,5 +1,5 @@
 import { Router } from "express";
-import __dirname from "../utils.js"
+import __dirname from "../utils/utils.js"
 import ProductsModel from "../DAO/Mongo/models/products.model.js";
 import MessagesModel from "../DAO/Mongo/models/messages.model.js";
 import {getAllProductsRender} from "../controllers/viewsController.js"

@@ -9,8 +9,8 @@ import { authRouter } from "./routes/auth.router.js";
 import { mocksRouter } from "./routes/mocks.router.js";
 
 import handlebars from "express-handlebars";
-import __dirname from "./utils.js";
-import { connectMongo } from "./utils.js";
+import __dirname from "./utils/utils.js";
+import { connectMongo } from "./utils/utils.js";
 import { Server } from "socket.io";
 import session from "express-session";
 import MongoStore from "connect-mongo";
@@ -18,6 +18,8 @@ import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import { sessionsRouter } from "./routes/sessions.router.js";
 import compression from "compression";
+import errorHandler from "./middlewares/errors.js"
+import { addLogger } from "./utils/logger.js";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -54,6 +56,7 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
 //--------------- Middlewares ---------------
+app.use(addLogger)
 app.use(express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(compression({}))
@@ -71,3 +74,7 @@ app.use("/api/carts", cartsRouter);
 app.use("/auth", authRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use('/api/mock', mocksRouter);
+
+
+//errorHandler
+app.use(errorHandler)
