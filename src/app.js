@@ -8,8 +8,9 @@ import { viewsRouter } from "./routes/views.router.js";
 import { authRouter } from "./routes/auth.router.js";
 import { mocksRouter } from "./routes/mocks.router.js";
 
+
 import handlebars from "express-handlebars";
-import __dirname from "./utils/utils.js";
+import __dirname from "../__dirname.js";
 import { connectMongo } from "./utils/utils.js";
 import { Server } from "socket.io";
 import session from "express-session";
@@ -20,6 +21,7 @@ import { sessionsRouter } from "./routes/sessions.router.js";
 import compression from "compression";
 import errorHandler from "./middlewares/errors.js";
 import { addLogger } from "./utils/logger.js";
+import nodemailer from "nodemailer";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -52,12 +54,12 @@ socketServer.on("connection", (socket) => {
 });
 
 app.engine("handlebars", handlebars.engine());
-app.set("views", __dirname + "/views");
+app.set("views", __dirname + "/src/views");
 app.set("view engine", "handlebars");
 
 //--------------- Middlewares ---------------
 app.use(addLogger);
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/src/public"));
 app.use(express.json());
 app.use(compression({}));
 app.use(express.urlencoded({ extended: true }));
@@ -75,16 +77,6 @@ app.use("/auth", authRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/mock", mocksRouter);
 
-// borrar esto x dios
-app.use("/loggerTest", (req, res) => {
-   req.logger.debug("Mensage de debug");
-   req.logger.http("Mensage de http");
-   req.logger.info("Mensage de info");
-   req.logger.warn("Mensage de warn");
-   req.logger.error("Mensage de error");
-   req.logger.fatal("Mensage de fatal");
-   res.status(200).send("Mirá la consola pa")
-});
 
 //errorHandler
 app.use(errorHandler);

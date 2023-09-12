@@ -5,6 +5,7 @@ import { createHash, isValidPassword } from "../utils/utils.js";
 import GitHubStrategy from "passport-github2";
 import fetch from "node-fetch";
 import CartsServices from "../services/carts.services.js";
+import { v4 as uuidv4 } from 'uuid';
 
 const cartsServices = new CartsServices();
 
@@ -12,24 +13,21 @@ const LocalStrategy = local.Strategy;
 const initalizePassport = () => {
    passport.use(
       "login",
-      new LocalStrategy(
-         { usernameField: "email" },
-         async (username, password, done) => {
-            try {
-               const user = await UsersModel.findOne({ email: username });
-               if (!user) {
-                  console.log("User doesn't exist");
-                  return done(null, false);
-               }
-               if (!isValidPassword(password, user.password)) {
-                  return done(null, false);
-               }
-               return done(null, user);
-            } catch (e) {
-               return done(e);
+      new LocalStrategy({ usernameField: "email" }, async (username, password, done) => {
+         try {
+            const user = await UsersModel.findOne({ email: username });
+            if (!user) {
+               console.log("User doesn't exist");
+               return done(null, false);
             }
+            if (!isValidPassword(password, user.password)) {
+               return done(null, false);
+            }
+            return done(null, user);
+         } catch (e) {
+            return done(e);
          }
-      )
+      })
    );
 
    passport.use(
@@ -47,6 +45,7 @@ const initalizePassport = () => {
                const newCart = await cartsServices.createCart();
                const cartID = newCart.result.payload._id.toString();
 
+               const token=uuidv4();
                const newUser = new UsersModel({
                   firstName,
                   lastName,
@@ -54,6 +53,7 @@ const initalizePassport = () => {
                   age,
                   cart: cartID,
                   password: createHash(password),
+                  vfToken:token
                });
                let result = await newUser.save();
                const assignUserToCart = await cartsServices.assignUserToCart(
@@ -87,14 +87,10 @@ const initalizePassport = () => {
                   },
                });
                const emails = await res.json();
-               const emailDetail = emails.find(
-                  (email) => email.verified == true
-               );
+               const emailDetail = emails.find((email) => email.verified == true);
 
                if (!emailDetail) {
-                  return done(
-                     new Error("cannot get a valid email for this user")
-                  );
+                  return done(new Error("cannot get a valid email for this user"));
                }
                profile.email = emailDetail.email;
 
@@ -104,12 +100,13 @@ const initalizePassport = () => {
                   const cartID = newCart.result.payload._id.toString();
                   const newUser = {
                      email: profile.email,
-                     firstName:
-                        profile._json.name || profile._json.login || "noname",
+                     firstName: profile._json.name || profile._json.login || "noname",
                      lastName: "nolast",
                      age: 0,
                      cart: cartID,
                      password: "$%/$)#lJGITKsj(!_$:%HUB_:;mf/#)¨*",
+                     isVerified:true,
+                     loginType:"Github",
                   };
 
                   let userCreated = await UsersModel.create(newUser);
@@ -122,7 +119,7 @@ const initalizePassport = () => {
                   try {
                      const user = await UsersModel.findOneAndUpdate(
                         { email: newUser.email },
-                        { $set: { password: null, lastName: null } },
+                        { $set: { password: null, } },
                         { new: true, upsert: true }
                      );
                      console.log(user);

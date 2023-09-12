@@ -12,11 +12,17 @@ import {
    getRegister,
    postRegister,
    failRegister,
+   verifyEmail,
+   requestPasswordReset,
+   requestPasswordResetForm,
+   passwordResetForm,
+   passwordReset,
+   passwordResetSuccess
 } from "../controllers/auth.controller.js";
 
 export const authRouter = Router();
 
-authRouter.get("/session", getSession);
+authRouter.get("/current", getSession);
 
 authRouter.get("/logout", logout);
 
@@ -43,3 +49,17 @@ authRouter.post(
 );
 
 authRouter.get("/failregister", failRegister);
+
+authRouter.get("/verify", isUser, verifyEmail);
+
+
+authRouter.get("/reqpwreset", requestPasswordResetForm);
+
+authRouter.post("/reqpwreset", requestPasswordReset);
+
+authRouter.get("/pwreset", passwordResetForm);
+
+authRouter.post("/pwreset", passwordReset);
+
+authRouter.get("/pwresetsuccess", passwordResetSuccess);
+

@@ -1,8 +1,12 @@
+import UsersDAO from "../DAO/Mongo/DAOS/users.dao.js";
+const usersDAO = new UsersDAO();
+
+
 export function isUser(req, res, next) {
-   if (req.session?.user?.email) {
+   if (req.isAuthenticated()) {
       return next();
    }
-   return res.status(401).render("error", { error: "Error de autenticación!" });
+   return res.status(401).render("error", { error: "Error de autenticación2!" });
 }
 
 export function isAdmin(req, res, next) {

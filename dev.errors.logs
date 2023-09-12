@@ -1,0 +1,10 @@
+[5:44:24 AM] [ERROR]: ValidationError: users validation failed: lastName: Path `lastName` is required., password: Path `password` is required.
+    at model.Document.invalidate (C:\Users\TheNasky\Documents\Backend\node_modules\mongoose\lib\document.js:3162:32)
+    at C:\Users\TheNasky\Documents\Backend\node_modules\mongoose\lib\document.js:2955:17
+    at C:\Users\TheNasky\Documents\Backend\node_modules\mongoose\lib\schematype.js:1368:9
+    at processTicksAndRejections (node:internal/process/task_queues:78:11)
+[5:47:00 AM] [ERROR]: ValidationError: users validation failed: lastName: Path `lastName` is required., password: Path `password` is required.
+    at model.Document.invalidate (C:\Users\TheNasky\Documents\Backend\node_modules\mongoose\lib\document.js:3162:32)
+    at C:\Users\TheNasky\Documents\Backend\node_modules\mongoose\lib\document.js:2955:17
+    at C:\Users\TheNasky\Documents\Backend\node_modules\mongoose\lib\schematype.js:1368:9
+    at processTicksAndRejections (node:internal/process/task_queues:78:11)

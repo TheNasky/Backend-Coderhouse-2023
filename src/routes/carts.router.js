@@ -9,9 +9,9 @@ import {
    updateProductQuantityInCart,
    emptyCart,
    purchaseCart,
-   getTickets
+   getTickets,
 } from "../controllers/carts.controller.js";
-import { isUser,isAdmin, isCartOwner } from "../middlewares/auth.js";
+import { isUser, isAdmin, isCartOwner } from "../middlewares/auth.js";
 
 export const cartsRouter = express.Router();
 
@@ -34,17 +34,13 @@ cartsRouter.delete("/:cid/products/:pid", isCartOwner, deleteProductFromCart);
 cartsRouter.put("/:cid", isCartOwner, updateCartWithProducts);
 
 // Update the quantity of a product in a cart
-cartsRouter.put(
-   "/:cid/products/:pid",
-   isCartOwner,
-   updateProductQuantityInCart
-);
+cartsRouter.put("/:cid/products/:pid", isCartOwner, updateProductQuantityInCart);
 
 // Empty a cart
 cartsRouter.delete("/:cid", isCartOwner, emptyCart);
 
 // Purchase a cart
-cartsRouter.post('/purchase/:cid', isUser,isCartOwner, purchaseCart);
+cartsRouter.post("/purchase/:cid", isUser, isCartOwner, purchaseCart);
 
 // get all tickets
-cartsRouter.get('/get/tickets', isUser,isAdmin, getTickets);  
+cartsRouter.get("/get/tickets", isUser, isAdmin, getTickets);

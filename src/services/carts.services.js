@@ -19,7 +19,7 @@ class CartsServices {
          return {
             status: 500,
             result: {
-               status: "error",
+               status: "Error",
                msg: "Something went wrong :(",
                payload: {},
             },
@@ -49,7 +49,7 @@ class CartsServices {
          return {
             status: 500,
             result: {
-               status: "error",
+               status: "Error",
                msg: "Something went wrong :(",
                payload: {},
             },
@@ -69,7 +69,7 @@ class CartsServices {
          return {
             status: 500,
             result: {
-               status: "error",
+               status: "Error",
                msg: "Internal Server Error",
                payload: {},
             },
@@ -130,7 +130,7 @@ class CartsServices {
          return {
             status: 500,
             result: {
-               status: "error",
+               status: "Error",
                msg: "Internal Server Error",
                payload: {},
             },
@@ -162,7 +162,7 @@ class CartsServices {
          return {
             status: 500,
             result: {
-               status: "error",
+               status: "Error",
                msg: "Internal Server Error",
                payload: {},
             },
@@ -197,7 +197,7 @@ class CartsServices {
          return {
             status: 500,
             result: {
-               status: "error",
+               status: "Error",
                msg: "Internal Server Error",
                payload: {},
             },
@@ -240,7 +240,7 @@ class CartsServices {
          return {
             status: 500,
             result: {
-               status: "error",
+               status: "Error",
                msg: "Internal Server Error",
                payload: {},
             },
@@ -272,7 +272,7 @@ class CartsServices {
          return {
             status: 500,
             result: {
-               status: "error",
+               status: "Error",
                msg: "Internal Server Error",
                payload: {},
             },

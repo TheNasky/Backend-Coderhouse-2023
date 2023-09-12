@@ -21,6 +21,16 @@ export default class UsersDao {
       }
    };
 
+   getUserByX = async (data) => {
+      try {
+         let user = await UsersModel.findOne(data);
+         return user;
+      } catch (error) {
+         console.log(error);
+         return null;
+      }
+   };
+
    createUser = async (user) => {
       try {
          let user = await UsersModel.create(user);
@@ -29,9 +39,21 @@ export default class UsersDao {
          return null;
       }
    };
+
+   //borrar esto?
    updateUser = async (id, user) => {
       try {
          let result = await UsersModel.updateOne({ _id: id }, { $set: user });
+      } catch (error) {
+         console.log(error);
+         return null;
+      }
+   };
+   //
+   updateUserWith = async (user, data) => {
+      try {
+         let result = await UsersModel.findOneAndUpdate(user, data, { new: true });
+         return result;
       } catch (error) {
          console.log(error);
          return null;

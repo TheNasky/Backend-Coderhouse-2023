@@ -6,6 +6,7 @@ import {
     updateProduct,
     deleteProduct
 } from '../controllers/products.controller.js';
+import { isUser,isAdmin } from '../middlewares/auth.js';
 
 export const productsRouter = express.Router();
 
@@ -22,4 +23,4 @@ productsRouter.post('/', createProduct);
 productsRouter.put('/:id', updateProduct);
 
 // Delete a product
-productsRouter.delete('/:id', deleteProduct);
+productsRouter.delete('/:id', isUser, isAdmin, deleteProduct);
