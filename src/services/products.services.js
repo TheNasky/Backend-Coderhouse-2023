@@ -51,7 +51,7 @@ class ProductsServices {
             },
          };
       } else {
-         const product = await productsDao.getPopulatedProductById(id);
+         const product = await productsDao.getProductById(id);
          return {
             status: 200,
             result: {
@@ -80,7 +80,7 @@ class ProductsServices {
             },
          };
       } else {
-         const finalProduct = await productsDao.create({
+         const finalProduct = await productsDao.createProduct({
             title: product.title,
             description: product.description,
             code: product.code,

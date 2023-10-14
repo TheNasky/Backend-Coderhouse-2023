@@ -1,0 +1,144 @@
+openapi: 3.0.1
+info:
+  title: Products API
+  description: API for managing products
+tags:
+  - name: Products
+    description: Operations related to products
+paths:
+  /api/products:
+    get:
+      tags:
+        - Products
+      summary: Get all products
+      parameters:
+        - name: limit
+          in: query
+          description: The maximum number of items to return
+          required: false
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: The page number
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: Sorting order (e.g., 'asc' or 'desc')
+          required: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Product category
+          required: false
+          schema:
+            type: string
+        - name: inStock
+          in: query
+          description: Show only in-stock products (true/false)
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - Products
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /api/products/{productId}:
+    get:
+      tags:
+        - Products
+      summary: Get product by ID
+      parameters:
+        - name: productId
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - Products
+      summary: Update product by ID
+      parameters:
+        - name: productId
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - Products
+      summary: Delete product by ID
+      parameters:
+        - name: productId
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: integer
+        category:
+          type: string
+      required:
+        - title
+        - price
+        - status
+        - stock
+        - category

@@ -1,0 +1,178 @@
+openapi: 3.0.1
+info:
+  title: Carts API
+  description: API for managing shopping carts
+tags:
+  - name: Carts
+    description: Operations related to shopping carts
+paths:
+  /api/carts:
+    get:
+      tags:
+        - Carts
+      summary: Get all carts
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - Carts
+      summary: Create a new cart
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /api/carts/{cid}:
+    get:
+      tags:
+        - Carts
+      summary: Get cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '404':
+          description: Cart not found
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - Carts
+      summary: Update cart by ID with new products
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  product:
+                    type: string
+                  quantity:
+                    type: integer
+              required:
+                - product
+                - quantity
+      responses:
+        '200':
+          description: Successful response
+        '404':
+          description: Cart not found
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - Carts
+      summary: Empty cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '404':
+          description: Cart not found
+        '500':
+          description: Internal server error
+  /api/carts/{cid}/products/{pid}:
+    post:
+      tags:
+        - Carts
+      summary: Add product to cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '404':
+          description: Cart or product not found
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - Carts
+      summary: Remove product from cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '404':
+          description: Cart or product not found
+        '500':
+          description: Internal server error
+  /api/carts/purchase/{cid}:
+    post:
+      tags:
+        - Carts
+      summary: Purchase cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Invalid cart ID or cart is empty
+        '404':
+          description: Cart not found
+        '500':
+          description: Internal server error
+  /api/carts/get/tickets:
+    get:
+      tags:
+        - Carts
+      summary: Get all tickets
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error

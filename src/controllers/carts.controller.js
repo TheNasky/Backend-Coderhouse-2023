@@ -1,15 +1,15 @@
 import CartsServices from "../services/carts.services.js";
 import { logger } from "../utils/logger.js";
 
-
 const cartsServices = new CartsServices();
 
+// Get all carts
 export const getAllCarts = async (req, res) => {
    try {
       const result = await cartsServices.getAllCarts();
       res.status(result.status).json(result.result);
    } catch (error) {
-      logger.error(`${error.stack}`)
+      logger.error(`${error.stack}`);
       res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -17,13 +17,14 @@ export const getAllCarts = async (req, res) => {
    }
 };
 
+// Get a cart by ID
 export const getCartById = async (req, res) => {
    try {
       const cid = req.params.cid;
       const result = await cartsServices.getCartById(cid);
       res.status(result.status).json(result.result);
    } catch (error) {
-      logger.error(`${error.stack}`)
+      logger.error(`${error.stack}`);
       res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -31,12 +32,13 @@ export const getCartById = async (req, res) => {
    }
 };
 
+// Create a new cart
 export const createCart = async (req, res) => {
    try {
       const result = await cartsServices.createCart();
       res.status(result.status).json(result.result);
    } catch (error) {
-      logger.error(`${error.stack}`)
+      logger.error(`${error.stack}`);
       res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -44,6 +46,7 @@ export const createCart = async (req, res) => {
    }
 };
 
+// Add a product to a cart
 export const addProductToCart = async (req, res) => {
    try {
       const cid = req.params.cid;
@@ -51,7 +54,7 @@ export const addProductToCart = async (req, res) => {
       const result = await cartsServices.addProductToCart(cid, pid);
       res.status(result.status).json(result.result);
    } catch (error) {
-      logger.error(`${error.stack}`)
+      logger.error(`${error.stack}`);
       res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -59,6 +62,7 @@ export const addProductToCart = async (req, res) => {
    }
 };
 
+// Delete a product from a cart
 export const deleteProductFromCart = async (req, res) => {
    try {
       const cid = req.params.cid;
@@ -66,7 +70,7 @@ export const deleteProductFromCart = async (req, res) => {
       const result = await cartsServices.deleteProductFromCart(cid, pid);
       res.status(result.status).json(result.result);
    } catch (error) {
-      logger.error(`${error.stack}`)
+      logger.error(`${error.stack}`);
       res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -74,6 +78,7 @@ export const deleteProductFromCart = async (req, res) => {
    }
 };
 
+// Update a cart with new products
 export const updateCartWithProducts = async (req, res) => {
    try {
       const cid = req.params.cid.trim();
@@ -81,7 +86,7 @@ export const updateCartWithProducts = async (req, res) => {
       const result = await cartsServices.updateCartWithProducts(cid, products);
       res.status(result.status).json(result.result);
    } catch (error) {
-      logger.error(`${error.stack}`)
+      logger.error(`${error.stack}`);
       res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -89,6 +94,7 @@ export const updateCartWithProducts = async (req, res) => {
    }
 };
 
+// Update the quantity of a product in a cart
 export const updateProductQuantityInCart = async (req, res) => {
    try {
       const cid = req.params.cid;
@@ -97,7 +103,7 @@ export const updateProductQuantityInCart = async (req, res) => {
       const result = await cartsServices.updateProductQuantityInCart(cid, pid, quantity);
       res.status(result.status).json(result.result);
    } catch (error) {
-      logger.error(`${error.stack}`)
+      logger.error(`${error.stack}`);
       res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -105,13 +111,14 @@ export const updateProductQuantityInCart = async (req, res) => {
    }
 };
 
+// Empty a cart
 export const emptyCart = async (req, res) => {
    try {
       const cid = req.params.cid;
       const result = await cartsServices.emptyCart(cid);
       res.status(result.status).json(result.result);
    } catch (error) {
-      logger.error(`${error.stack}`)
+      logger.error(`${error.stack}`);
       res.status(500).json({
          status: "error",
          msg: "Something went wrong :(",
@@ -119,12 +126,14 @@ export const emptyCart = async (req, res) => {
    }
 };
 
+// Purchase a cart
 export const purchaseCart = async (req, res) => {
    const cid = req.params.cid;
    const result = await cartsServices.purchaseCart(cid);
    return res.status(result.status).json(result.result);
 };
 
+// Get all tickets
 export const getTickets = async (req, res) => {
    const result = await cartsServices.getTickets();
    return res.status(result.status).json(result.result);

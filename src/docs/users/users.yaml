@@ -1,0 +1,194 @@
+openapi: 3.0.1
+info:
+  title: Users API
+  description: API for managing user authentication and profiles
+tags:
+  - name: Users
+    description: Operations related to user authentication and profiles
+paths:
+  /auth/current:
+    get:
+      tags:
+        - Users
+      summary: Get current session
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /auth/logout:
+    get:
+      tags:
+        - Users
+      summary: Logout user
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /auth/profile:
+    get:
+      tags:
+        - Users
+      summary: Get user profile
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /auth/admin:
+    get:
+      tags:
+        - Users
+      summary: Get admin panel (requires admin privileges)
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /auth/login:
+    get:
+      tags:
+        - Users
+      summary: Get login page
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - Users
+      summary: Handle login form submission
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /auth/faillogin:
+    get:
+      tags:
+        - Users
+      summary: Login failure route
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /auth/register:
+    get:
+      tags:
+        - Users
+      summary: Get registration page
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - Users
+      summary: Handle registration form submission
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /auth/failregister:
+    get:
+      tags:
+        - Users
+      summary: Registration failure route
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /auth/verify:
+    get:
+      tags:
+        - Users
+      summary: Verify email for a user
+      parameters:
+        - name: token
+          in: query
+          description: Verification token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Invalid Verification Token
+        '500':
+          description: Internal server error
+  /auth/reqpwreset:
+    get:
+      tags:
+        - Users
+      summary: Request password reset form
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - Users
+      summary: Handle password reset request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /auth/pwreset:
+    get:
+      tags:
+        - Users
+      summary: Password reset form
+      parameters:
+        - name: token
+          in: query
+          description: Reset token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - Users
+      summary: Handle password reset
+      parameters:
+        - name: token
+          in: query
+          description: Reset token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+  /auth/pwresetsuccess:
+    get:
+      tags:
+        - Users
+      summary: Password reset success route
+      parameters:
+        - name: token
+          in: query
+          description: Reset token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
