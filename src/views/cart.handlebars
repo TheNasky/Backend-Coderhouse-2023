@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Cart</title>
+</head>
+<body>
+    <header>
+        <!-- Replace this with your logo or an H1 tag -->
+        <h1><a href="/">FreeMarket.com</a></h1>
+
+        {{#if session.user}}
+            <!-- User is logged in -->
+            <nav>
+                <ul>
+                    <li><a href="/auth/profile">Profile</a></li>
+                    <li><a href="/carts/{{session.user.cart}}">Cart</a></li>
+                    <li><a href="/create-product">Create Product</a></li>
+                    <li><a href="/auth/logout">Logout</a></li>
+                </ul>
+            </nav>
+        {{else}}
+            <!-- User is not logged in -->
+            <nav>
+                <ul>
+                    <li><a href="/auth/login">Login</a></li>
+                    <li><a href="/auth/register">Register</a></li>
+                </ul>
+            </nav>
+        {{/if}}
+    </header>
+
+    <h1>Your Cart</h1>
+
+    <ul>
+        {{#each products}}
+            <li>{{product.title}} - ${{product.price}} - Quantity: {{quantity}}</li>
+        {{/each}}
+    </ul>
+
+    <!-- Add an empty cart button -->
+    <form id="emptyCartForm">
+        <button type="submit">Empty Cart</button>
+    </form>
+
+    <script>
+        // Add an event listener for the form submission
+        document.getElementById('emptyCartForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            // Get the cart ID from the session
+            const cartId = '{{session.user.cart}}';
+
+            // Hit the endpoint to empty the cart
+            fetch(`/api/carts/${cartId}`, {
+                method: 'DELETE',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    // Optionally, you can provide feedback to the user or update the page
+                    alert('Cart emptied successfully!');
+                    window.location.reload(); // Reload the page
+                })
+                .catch(error => {
+                    console.error('Error emptying cart:', error);
+                });
+        });
+    </script>
+</body>
+</html>

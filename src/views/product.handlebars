@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeMarket</title>
+</head>
+<body>
+    <header>
+        <!-- Replace this with your logo or an H1 tag -->
+        <h1><a href="/">FreeMarket.com</a></h1>
+
+        {{#if session.user}}
+            <!-- User is logged in -->
+            <nav>
+                <ul>
+                    <li><a href="/auth/profile">Profile</a></li>
+                    <li><a href="/carts/{{session.user.cart}}">Cart</a></li>
+                    <li><a href="/create-product">Create Product</a></li>
+                    <li><a href="/auth/logout">Logout</a></li>
+                </ul>
+            </nav>
+        {{else}}
+            <!-- User is not logged in -->
+            <nav>
+                <ul>
+                    <li><a href="/auth/login">Login</a></li>
+                    <li><a href="/auth/register">Register</a></li>
+                </ul>
+            </nav>
+        {{/if}}
+    </header>
+
+    <main>
+        <section>
+            <h2>Product Details</h2>
+            <!-- Display product details here -->
+            <h3>{{product.title}}</h3>
+            <img src="{{product.thumbnail}}" alt="{{product.title}} Thumbnail" />
+            <p>{{product.description}}</p>
+            <p>Price: ${{product.price}}</p>
+
+            <!-- Add to Cart button -->
+            <button onclick="addToCart('{{product._id}}')">Add to Cart</button>
+        </section>
+    </main>
+
+    <script>
+        // Function to add the product to the cart
+        function addToCart(productId) {
+            // Check if the user is logged in
+            const isLoggedIn = '{{session.user}}';
+
+            if (isLoggedIn) {
+                // User is logged in, proceed to add to cart
+                addToCartWithQuantity(productId, 1);
+            } else {
+                // User is not logged in, redirect to login page
+                window.location.href = '/auth/login';
+            }
+        }
+
+        // Function to add the product to the cart with a specified quantity
+        function addToCartWithQuantity(productId, quantity) {
+            // Get the user's cart ID from the session
+            const cartId = '{{session.user.cart}}';
+
+            // Hit the endpoint to add the product to the cart with the specified quantity
+            fetch(`/api/carts/${cartId}/products/${productId}?quantity=${quantity}`, {
+                method: 'POST',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Optionally, you can provide feedback to the user
+                    alert(`Added ${quantity} ${quantity > 1 ? 'items' : 'item'} to the cart.`);
+                })
+                .catch(error => {
+                    console.error('Error adding product to cart:', error);
+                });
+        }
+    </script>
+</body>
+</html>

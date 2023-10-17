@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeMarket - Create Product</title>
+</head>
+<body>
+    <header>
+        <!-- Replace this with your logo or an H1 tag -->
+        <h1><a href="/">FreeMarket.com</a></h1>
+
+        {{#if session.user}}
+            <!-- User is logged in -->
+            <nav>
+                <ul>
+                    <li><a href="/auth/profile">Profile</a></li>
+                    <li><a href="/carts/{{session.user.cart}}">Cart</a></li>
+                    <li><a href="/create-product">Create Product</a></li>
+                    <li><a href="/auth/logout">Logout</a></li>
+                </ul>
+            </nav>
+        {{else}}
+            <!-- User is not logged in -->
+            <nav>
+                <ul>
+                    <li><a href="/auth/login">Login</a></li>
+                    <li><a href="/auth/register">Register</a></li>
+                </ul>
+            </nav>
+        {{/if}}
+    </header>
+
+    <main>
+        <section>
+            <h2>Create Product:</h2>
+            <form id="addProductForm">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+                <label for="description">Description:</label>
+                <input type="text" id="description" name="description" required>
+                <label for="code">Code:</label>
+                <input type="text" id="code" name="code" required>
+                <label for="price">Price:</label>
+                <input type="text" id="price" name="price" required>
+                <label for="stock">Stock:</label>
+                <input type="text" id="stock" name="stock" required>
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" required>
+                <label for="thumbnails">Thumbnails:</label>
+                <input type="file" id="thumbnails" name="thumbnails">
+
+                <button type="submit">Create Product</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Add an event listener for the form submission
+        document.getElementById('addProductForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            // Get form data and create a new product
+            const formData = new FormData(event.target);
+            const newProduct = Object.fromEntries(formData.entries());
+
+            // Hit the endpoint to add the product
+            fetch('/api/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newProduct),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    // Optionally, you can provide feedback to the user or redirect
+                    alert('Product created successfully!');
+                    window.location.href = '/'; // Redirect to the home page
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>

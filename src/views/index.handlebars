@@ -1,6 +1,109 @@
-<div>
-    <h1>hola {{name}}</h1>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeMarket</title>
+</head>
+<body>
+    <header>
+        <!-- Replace this with your logo or an H1 tag -->
+        <h1><a href="/">FreeMarket.com</a></h1>
 
- <script src="/socket.io/socket.io.js"></script>
- <script src="js/index.js"></script>
+        {{#if session.user}}
+            <!-- User is logged in -->
+            <nav>
+                <ul>
+                    <li><a href="/auth/profile">Profile</a></li>
+                    <li><a href="/carts/{{session.user.cart}}">Cart</a></li>
+                    <li><a href="/create-product">Create Product</a></li>
+                    <li><a href="/auth/logout">Logout</a></li>
+                </ul>
+            </nav>
+        {{else}}
+            <!-- User is not logged in -->
+            <nav>
+                <ul>
+                    <li><a href="/auth/login">Login</a></li>
+                    <li><a href="/auth/register">Register</a></li>
+                </ul>
+            </nav>
+        {{/if}}
+    </header>
+
+    <main>
+        <section>
+            <h2>All Products</h2>
+            <ul id="products-list">
+                <!-- Products will be dynamically added here -->
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        // Fetch products and update the DOM
+        fetch('/api/products')
+            .then(response => response.json())
+            .then(products => {
+                const productsList = document.getElementById('products-list');
+                products.payload.forEach(product => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <h3>${product.title}</h3>
+                        <img src="${product.thumbnail}" alt="${product.title} Thumbnail">
+                        <p>${product.description}</p>
+                        <p>Price: $${product.price}</p>
+                        <button onclick="handleAddToCart('${product._id}')">Add to Cart</button>
+                        <button onclick="viewProduct('${product._id}')">View Product</button>
+                    `;
+                    productsList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error fetching products:', error));
+
+        // Define functions for button actions
+        function handleAddToCart(productId) {
+            // Check if the user is logged in
+            const isLoggedIn = '{{session.user}}';
+
+            if (isLoggedIn) {
+                // User is logged in, proceed to add to cart
+                addToCart(productId);
+            } else {
+                // User is not logged in, redirect to login page
+                window.location.href = '/auth/login';
+            }
+        }
+
+        function addToCart(productId) {
+            // Get the user's cart ID from the session
+            const cartId = '{{session.user.cart}}';
+
+            // Implement logic to add the product to the cart
+            fetch(`/api/carts/${cartId}/products/${productId}`, {
+                method: 'POST',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error adding product to cart:', error);
+                });
+        }
+
+        function viewProduct(productId) {
+            // Redirect to the product details page
+            const isLoggedIn = '{{session.user}}';
+
+            if (isLoggedIn) {
+                // User is logged in, redirect to the product page
+                window.location.href = `/product/${productId}`;
+            } else {
+                // User is not logged in, redirect to login page
+                window.location.href = '/auth/login';
+            }
+        }
+    </script>
+</body>
+</html>

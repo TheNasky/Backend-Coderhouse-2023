@@ -1,8 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>User Profile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeMarket</title>
 </head>
+<body>
+    <header>
+        <!-- Replace this with your logo or an H1 tag -->
+        <h1><a href="/">FreeMarket.com</a></h1>
+
+        {{#if user}}
+            <!-- User is logged in -->
+            <nav>
+                <ul>
+                    <li><a href="/auth/profile">Profile</a></li>
+                    <li><a href="/carts/{{user.cart}}">Cart</a></li>
+                    <li><a href="/create-product">Create Product</a></li>
+                    <li><a href="/auth/logout">Logout</a></li>
+                </ul>
+            </nav>
+        {{else}}
+            <!-- User is not logged in -->
+            <nav>
+                <ul>
+                    <li><a href="/auth/login">Login</a></li>
+                    <li><a href="/auth/register">Register</a></li>
+                </ul>
+            </nav>
+        {{/if}}
+    </header>
 <body>
   <h1>Profile</h1>
 

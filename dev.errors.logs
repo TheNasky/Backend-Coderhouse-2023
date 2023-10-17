@@ -30,3 +30,14 @@
     at param (C:\Users\TheNasky\Documents\Backend\node_modules\express\lib\router\index.js:365:14)
     at param (C:\Users\TheNasky\Documents\Backend\node_modules\express\lib\router\index.js:376:14)
     at Function.process_params (C:\Users\TheNasky\Documents\Backend\node_modules\express\lib\router\index.js:421:3)
+[1:42:21 AM] [ERROR]: TypeError: Cannot read properties of undefined (reading 'cid')
+    at getCartById (file:///C:/Users/TheNasky/Documents/Backend/src/controllers/carts.controller.js:23:30)
+    at file:///C:/Users/TheNasky/Documents/Backend/src/routes/views.router.js:30:21
+    at Layer.handle [as handle_request] (C:\Users\TheNasky\Documents\Backend\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\TheNasky\Documents\Backend\node_modules\express\lib\router\route.js:144:13)
+    at isCartOwner (file:///C:/Users/TheNasky/Documents/Backend/src/middlewares/auth.js:21:14)
+    at Layer.handle [as handle_request] (C:\Users\TheNasky\Documents\Backend\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\TheNasky\Documents\Backend\node_modules\express\lib\router\route.js:144:13)
+    at Route.dispatch (C:\Users\TheNasky\Documents\Backend\node_modules\express\lib\router\route.js:114:3)
+    at Layer.handle [as handle_request] (C:\Users\TheNasky\Documents\Backend\node_modules\express\lib\router\layer.js:95:5)
+    at C:\Users\TheNasky\Documents\Backend\node_modules\express\lib\router\index.js:284:15
