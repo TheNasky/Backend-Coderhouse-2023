@@ -1,6 +1,9 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "engines": {
+    "node": "18.x"
+  },
   "main": "app.js",
   "scripts": {
     "dev": "nodemon --ext js,yaml ./src/app.js",
