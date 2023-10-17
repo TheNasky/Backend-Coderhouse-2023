@@ -4,7 +4,8 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon --ext js,yaml ./src/app.js",
-    "prod": "node ./src/app.js"
+    "prod": "node ./src/app.js",
+    "qa": "node ./src/app.js"
   },
   "author": "",
   "license": "ISC",
