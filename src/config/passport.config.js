@@ -74,7 +74,7 @@ const initalizePassport = () => {
          {
             clientID: process.env.GITHUB_ID,
             clientSecret: process.env.GITHUB_SECRET,
-            callbackURL: "http://localhost:8080/api/sessions/githubcallback",
+            callbackURL: "https://backend-coderhouse-2023-qa.onrender.com/api/sessions/githubcallback",
          },
          async (accesToken, _, profile, done) => {
             console.log(profile);
