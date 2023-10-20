@@ -71,7 +71,7 @@ const initalizePassport = () => {
    passport.use(
       "github",
       new GitHubStrategy(
-         {
+         {  
             clientID: process.env.GITHUB_ID,
             clientSecret: process.env.GITHUB_SECRET,
             callbackURL: "https://backend-coderhouse-2023-qa.onrender.com/api/sessions/githubcallback",

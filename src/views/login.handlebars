@@ -1,4 +1,24 @@
-<h1>LOGIN</h1>
+<header>
+        <!-- Replace this with your logo or an H1 tag -->
+        <h1><a href="/">FreeMarket.com</a></h1>
+
+        {{#if session.user}}
+            <!-- User is logged in -->
+            <nav>
+                <ul>
+                    <li><a href="/auth/profile">Profile</a></li>
+                    <li><a href="/carts/{{session.user.cart}}">Cart</a></li>
+                    <li><a href="/create-product">Create Product</a></li>
+                    <li><a href="/auth/logout">Logout</a></li>
+                </ul>
+            </nav>
+        {{else}}
+            <!-- User is not logged in -->
+            <nav>
+            </nav>
+        {{/if}}
+    </header>
+    <h1>LOGIN</h1>
 <form action="/auth/login" method="post">
     <input type="text" name="email" placeholder="email">
     <input type="text" name="password" placeholder="password">
